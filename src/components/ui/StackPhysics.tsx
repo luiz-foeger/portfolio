@@ -4,8 +4,9 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Matter from 'matter-js';
 import {
     SiNextdotjs, SiTypescript, SiJavascript, SiTailwindcss,
-    SiFigma, SiReact, SiWordpress, SiGit, SiAdobephotoshop, SiNodedotjs
+    SiFigma, SiReact, SiWordpress, SiGit, SiNodedotjs
 } from 'react-icons/si';
+import { SiAdobephotoshop } from './BrandIcons';
 
 const SKILLS = [
     { icon: SiNextdotjs, label: 'Next.js', color: '#fff' },
@@ -139,7 +140,7 @@ const TechPhysicsSimple = () => {
                         key={index}
                         // @ts-ignore
                         ref={(el) => (itemsRef.current[index] = el)}
-                        className="absolute top-0 left-0 flex items-center justify-center p-3 md:p-4 bg-white/5 border border-white/10 rounded-2xl shadow-lg backdrop-blur-sm select-none will-change-transform opacity-0 hover:border-[#8DCFFB]/50 transition-colors duration-300"
+                        className="absolute top-0 left-0 flex items-center justify-center p-3 md:p-4 bg-white/5 border border-white/10 rounded-2xl shadow-lg backdrop-blur-xs select-none will-change-transform opacity-0 hover:border-[#8DCFFB]/50 transition-colors duration-300"
                         style={{
                             width: `${BOX_SIZE}px`,
                             height: `${BOX_SIZE}px`,

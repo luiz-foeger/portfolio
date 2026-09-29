@@ -1,7 +1,7 @@
 
 'use client';
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform, MotionValue } from 'motion/react';
 
 const manifestoText = "ENGINEERING DIGITAL EXPERIENCES. CRAFTING PIXEL-PERFECT INTERFACES AND SCALABLE WEB APPLICATIONS. COMPLEX LOGIC MEETS MODERN AESTHETICS.";
 
@@ -24,7 +24,7 @@ const ScrollManifesto = () => {
           [ 00 — Filosofia & Manifesto ]
         </div> */}
 
-        <h2 className="font-['Bebas_Neue'] font-black uppercase text-[12vw] sm:text-[10vw] md:text-[7.5vw] lg:text-[6vw] leading-[0.85] tracking-wide sm:tracking-normal flex flex-wrap justify-center text-center gap-x-2 md:gap-x-4 gap-y-2 sm:gap-y-4">
+        <h2 className="font-bebas font-black uppercase text-[12vw] sm:text-[10vw] md:text-[7.5vw] lg:text-[6vw] leading-[0.85] tracking-wide sm:tracking-normal flex flex-wrap justify-center text-center gap-x-2 md:gap-x-4 gap-y-2 sm:gap-y-4">
           {words.map((word, i) => {
             // define the range for each word based on its index and total number of words
             const start = i / words.length;

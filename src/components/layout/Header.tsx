@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { HiArrowDown } from 'react-icons/hi2';
 import { AnimatedLogoHeader } from '../ui/AnimatedLogoHeader';
 
@@ -53,7 +53,7 @@ const Header = () => {
                 animate={{ scale: isIntro ? (isMobile ? 1.5 : 3) : 0.45 }}
                 transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
             >
-                <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="block pointer-events-auto bg-transparent border-none p-0 cursor-pointer outline-none">
+                <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="block pointer-events-auto bg-transparent border-none p-0 cursor-pointer outline-hidden">
                     <AnimatedLogoHeader />
                 </button>
             </motion.div>

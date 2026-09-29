@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 const Links = ({ text, href, className = "" }: { text: string, href?: string, className?: string }) => {
   const Tag = href ? "a" : "button";
@@ -12,10 +12,10 @@ const Links = ({ text, href, className = "" }: { text: string, href?: string, cl
       rel={href?.startsWith('http') ? "noopener noreferrer" : ""}
       className={`group relative overflow-hidden inline-flex ${className}`}
     >
-      <span className="transition-transform duration-500 ease-[0.16,1,0.3,1] group-hover:-translate-y-full">
+      <span className="transition-transform duration-500 group-hover:-translate-y-full">
         {text}
       </span>
-      <span className="absolute inset-0 transition-transform duration-500 ease-[0.16,1,0.3,1] translate-y-full group-hover:translate-y-0 text-white">
+      <span className="absolute inset-0 transition-transform duration-500 translate-y-full group-hover:translate-y-0 text-white">
         {text}
       </span>
     </Tag>
@@ -94,9 +94,9 @@ const Footer = () => {
     <footer className="w-full min-h-screen bg-[#050505] text-white flex flex-col justify-between p-6 md:p-8 lg:p-12 relative z-20 border-t border-white/10 font-sans">
 
       {/* navigation superior */}
-      <div className="font-['Bricolage_Grotesque'] font-bold text-[4vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1vw] grid grid-cols-2 md:grid-cols-4 gap-50 w-full items-start uppercase tracking-[0.2em]">
+      <div className="font-bricolage font-bold text-[4vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1vw] grid grid-cols-2 md:grid-cols-4 w-full items-start uppercase tracking-[0.2em]">
 
-        <div className="font-['Bricolage_Grotesque'] items-start md:items-start flex flex-col gap-2">
+        <div className="font-bricolage items-start md:items-start flex flex-col gap-2">
           <Links text="INFO" href="#" className="text-neutral-500 w-fit hover:text-white" />
           <Links text="CONTACT" href="#" className="text-neutral-500 w-fit hover:text-white" />
         </div>
@@ -136,7 +136,7 @@ const Footer = () => {
           href={`mailto:${email}`}
           initial="initial"
           whileHover="hover"
-          className="font-['Bricolage_Grotesque'] text-[8.5vw] lg:text-[9.25vw] mb-1 md:mb-0 font-black text-white leading-[0.8] tracking-tighter uppercase drop-shadow-2xl relative overflow-hidden"
+          className="font-bricolage text-[8.5vw] lg:text-[9.25vw] mb-1 md:mb-0 font-black text-white leading-[0.8] tracking-tighter uppercase drop-shadow-2xl relative overflow-hidden"
         >
           <motion.div className="flex" variants={staggerHover}>
             {email.split('').map((char, i) => (
@@ -157,15 +157,15 @@ const Footer = () => {
         </motion.a>
 
         {/* <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center w-full pointer-events-none">
-                <h1 className="font-['Bricolage_Grotesque'] text-[8.5vw] lg:text-[9.25vw] mb-1 md:mb-0 font-black  text-white leading-[0.8] tracking-tighter uppercase drop-shadow-2xl">
+                <h1 className="font-bricolage text-[8.5vw] lg:text-[9.25vw] mb-1 md:mb-0 font-black  text-white leading-[0.8] tracking-tighter uppercase drop-shadow-2xl">
                     foegerluiz@gmail.com
                 </h1>
-                <h1 className="font-['Bricolage_Grotesque'] text-[8.5vw] lg:text-[9.25vw] font-black text-white leading-[0.8] tracking-tighter uppercase drop-shadow-2xl">
+                <h1 className="font-bricolage text-[8.5vw] lg:text-[9.25vw] font-black text-white leading-[0.8] tracking-tighter uppercase drop-shadow-2xl">
                     ©2026
                 </h1>
             </div> */}
 
-        <h1 className="font-['Bricolage_Grotesque'] text-[8.5vw] lg:text-[9.25vw] font-black text-white leading-[0.8] tracking-tighter uppercase drop-shadow-2xl">
+        <h1 className="font-bricolage text-[8.5vw] lg:text-[9.25vw] font-black text-white leading-[0.8] tracking-tighter uppercase drop-shadow-2xl">
           ©2026
         </h1>
       </div>
@@ -175,20 +175,20 @@ const Footer = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-6 w-full items-start">
 
         <div className="flex flex-col group">
-          <span className="text-base md:text-xl leading-none -mt-[3px] text-neutral-600 mb-2 font-['Bricolage_Grotesque'] transition-colors group-hover:text-white">
+          <span className="text-base md:text-xl md:leading-7 leading-none -mt-[3px] text-neutral-600 mb-2 font-bricolage transition-colors group-hover:text-white">
             [1]
           </span>
-          <h3 className="text-xl lg:text-2xl uppercase font-['Bricolage_Grotesque'] font-bold tracking-widest text-white mb-2">
+          <h3 className="text-xl lg:text-2xl uppercase font-bricolage font-bold tracking-widest text-white mb-2">
             <Links text="@FOEGER.DEV" href="https://instagram.com/foeger.dev" />
           </h3>
         </div>
 
         {/* [2] 23—26 */}
-        <div className="font-['Bricolage_Grotesque'] flex flex-col group">
-          <span className="text-base md:text-xl leading-none -mt-[3px] text-neutral-600 mb-2 font-['Bricolage_Grotesque'] transition-colors group-hover:text-white">
+        <div className="font-bricolage flex flex-col group">
+          <span className="text-base md:text-xl md:leading-7 leading-none -mt-[3px] text-neutral-600 mb-2 font-bricolage transition-colors group-hover:text-white">
             [2]
           </span>
-          <h3 className="text-xl lg:text-2xl uppercase font-['Bricolage_Grotesque'] font-bold tracking-widest text-white mb-4">
+          <h3 className="text-xl lg:text-2xl uppercase font-bricolage font-bold tracking-widest text-white mb-4">
             23—{currentYear}
           </h3>
           <p className="text-neutral-400 normal-case leading-relaxed text-[4.5vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1vw] pr-2">
@@ -197,11 +197,11 @@ const Footer = () => {
         </div>
 
         {/* [3] STATUS */}
-        <div className="font-['Bricolage_Grotesque'] flex flex-col group md:items-end md:text-right">
-          <span className="text-base md:text-xl leading-none -mt-[3px] text-neutral-600 mb-2 font-['Bricolage_Grotesque'] transition-colors group-hover:text-white">
+        <div className="font-bricolage flex flex-col group md:items-end md:text-right">
+          <span className="text-base md:text-xl md:leading-7 leading-none -mt-[3px] text-neutral-600 mb-2 font-bricolage transition-colors group-hover:text-white">
             [3]
           </span>
-          <h3 className="text-xl lg:text-2xl uppercase font-['Bricolage_Grotesque'] font-bold tracking-widest text-white mb-4">
+          <h3 className="text-xl lg:text-2xl uppercase font-bricolage font-bold tracking-widest text-white mb-4">
             STATUS
           </h3>
           <p className="text-neutral-400 normal-case leading-relaxed text-[4.5vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1vw] mix-blend-difference">
@@ -210,12 +210,12 @@ const Footer = () => {
         </div>
 
         {/* [4] SCOPE */}
-        <div className="font-['Bricolage_Grotesque'] flex flex-col group md:items-end md:text-right">
+        <div className="font-bricolage flex flex-col group md:items-end md:text-right">
           <div className="flex flex-col items-start md:items-end">
-            <span className="text-base md:text-xl leading-none -mt-[3px] text-neutral-600 mb-2 font-['Bricolage_Grotesque'] transition-colors group-hover:text-white">
+            <span className="text-base md:text-xl md:leading-7 leading-none -mt-[3px] text-neutral-600 mb-2 font-bricolage transition-colors group-hover:text-white">
               [4]
             </span>
-            <h3 className="text-xl lg:text-2xl uppercase font-['Bricolage_Grotesque'] font-bold tracking-widest text-white mb-4">
+            <h3 className="text-xl lg:text-2xl uppercase font-bricolage font-bold tracking-widest text-white mb-4">
               SCOPE
             </h3>
           </div>

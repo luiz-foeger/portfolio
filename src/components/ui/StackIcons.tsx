@@ -9,10 +9,10 @@ import {
   SiReact,
   SiWordpress,
   SiGit,
-  SiAdobephotoshop,
 } from 'react-icons/si';
+import { SiAdobephotoshop } from './BrandIcons';
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 
 const Icones = () => {
   const listaIcones = [

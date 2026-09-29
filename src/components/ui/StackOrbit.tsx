@@ -1,15 +1,16 @@
 'use client';
 
     import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 // import { useCursor } from '../ui/CursorContext';
 
 import {
     SiNextdotjs, SiTypescript, SiJavascript, SiTailwindcss,
-    SiFigma, SiReact, SiWordpress, SiGit, SiAdobephotoshop, SiNodedotjs,
-    SiCss3 , SiVisualstudiocode, SiGithub
+    SiFigma, SiReact, SiWordpress, SiGit, SiNodedotjs,
+    SiGithub
 } from 'react-icons/si';
+import { SiAdobephotoshop, SiCss3, SiVisualstudiocode } from './BrandIcons';
 
 interface OrbitItem {
     icon: React.ElementType;
@@ -121,13 +122,13 @@ const StackOrbit = () => {
                         exit={{ opacity: 0, y: -15 }}
                         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     >
-                        {/* <h2 className="text-5xl md:text-6xl lg:text-7xl font-lexend font-black tracking-tighter text-white leading-[1.05] whitespace-pre-line"> */}
-                        <h2 className="font-['Bebas_Neue'] font-black text-[18vw] sm:text-[15vw] md:text-[12vw] lg:text-[6vw] leading-[0.85] tracking-wide sm:tracking-normal text-white whitespace-pre-line">
+                        {/* <h2 className="text-5xl md:text-6xl md:leading-none lg:text-7xl lg:leading-none font-lexend font-black tracking-tighter text-white leading-[1.05] whitespace-pre-line"> */}
+                        <h2 className="font-bebas font-black text-[18vw] sm:text-[15vw] md:text-[12vw] lg:text-[6vw] leading-[0.85] tracking-wide sm:tracking-normal text-white whitespace-pre-line">
                             {currentContent.title}
                         </h2>
                         <div className="mt-8 md:mt-16">
                             {/* <p className="text-xs font-lexend text-neutral-500 mb-4 tracking-widest uppercase"> */}
-                            <p className="font-['Bricolage_Grotesque'] font-bold text-[5vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1.5vw] text-neutral-400 mb-4 leading-relaxed max-w-sm">
+                            <p className="font-bricolage font-bold text-[5vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1.5vw] text-neutral-400 mb-4 leading-relaxed max-w-sm">
                                 {currentContent.subtitle}
                             </p>
                             <div className="h-[2px] w-full max-w-[500px] bg-white/40" />
@@ -184,7 +185,7 @@ const StackOrbit = () => {
                         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                         className="flex flex-col items-start lg:items-end"
                     >
-                        <p className="font-['Bricolage_Grotesque'] font-bold text-neutral-400 text-[5vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1.5vw] text-left max-w-sm">
+                        <p className="font-bricolage font-bold text-neutral-400 text-[5vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1.5vw] text-left max-w-sm">
                             {currentContent.desc}
                         </p>
                         {/* <div className="mt-8 pointer-events-auto">

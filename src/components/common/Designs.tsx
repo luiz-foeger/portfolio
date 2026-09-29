@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { FaTimes, FaBehance } from "react-icons/fa";
 
 // --- Definição de Tipos e Dados ---
@@ -85,7 +85,7 @@ const DesignProjects: React.FC = () => {
                     >
                         Principais Designs
                     </motion.h2>
-                    <motion.p className="text-white/90 text-sm sm:text-base md:text-2xl leading-relaxed text-center">
+                    <motion.p className="text-white/90 text-sm sm:text-base sm:leading-6 md:text-2xl md:leading-8 leading-relaxed text-center">
                         Explorando a estética visual além do código.
                     </motion.p>
                 </div>
@@ -107,7 +107,7 @@ const DesignProjects: React.FC = () => {
                                 loading="lazy"
                             />
 
-                            <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black via-transparent to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                            <div className="absolute inset-0 flex flex-col justify-end bg-linear-to-t/srgb from-black via-transparent to-transparent p-6 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                                 <span className="text-xs font-bold uppercase tracking-wider text-blue-400">
                                     {project.category}
                                 </span>
@@ -130,7 +130,7 @@ const DesignProjects: React.FC = () => {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                className="absolute inset-0 bg-black/90 backdrop-blur-sm"
+                                className="absolute inset-0 bg-black/90 backdrop-blur-xs"
                                 onClick={() => setSelectedId(null)}
                             />
 

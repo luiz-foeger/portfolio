@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'motion/react';
 
 export default function Cursor() {
   const CURSOR_SIZE = 20;

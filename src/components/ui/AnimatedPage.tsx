@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 export default function AnimatedPage({ children, className = '' }: { children: React.ReactNode, className?: string }) {
   
   useEffect(() => {

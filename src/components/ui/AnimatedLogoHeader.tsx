@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, Variants, Transition, useAnimationControls, useInView } from 'framer-motion';
+import { motion, Variants, Transition, useAnimationControls, useInView } from 'motion/react';
 import { useEffect, useRef } from 'react';
 
 export const AnimatedLogoHeader: React.FC = () => {

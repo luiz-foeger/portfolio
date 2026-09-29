@@ -1,7 +1,7 @@
 'use client';
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { FaInstagram, FaLinkedin, FaGithub, FaWhatsapp, FaGlobe, FaRocket, FaPaintBrush } from "react-icons/fa";
 
 const links = [
@@ -38,7 +38,7 @@ export default function Links() {
         animate={{ opacity: 1, y: 0 }}
         className="flex flex-col items-center mb-10 text-center"
       >
-        <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-cyan-500 to-teal-500 p-1 mb-4 shadow-xl shadow-cyan-500/20">
+        <div className="w-24 h-24 rounded-full bg-linear-to-tr/srgb from-cyan-500 to-teal-500 p-1 mb-4 shadow-xl shadow-cyan-500/20">
           <div className="w-full h-full rounded-full bg-[#1c2630] flex items-center justify-center overflow-hidden">
              {/* Sua foto de perfil */}
              <span className="text-2xl font-black">LF</span>

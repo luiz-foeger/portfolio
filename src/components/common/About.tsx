@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'motion/react';
 import StackOrbit from '../ui/StackOrbit';
 // import Icones from '../ui/Icones';
 // import TechPhysics from '../ui/TechPhysics';
@@ -35,7 +35,7 @@ const content = {
                     alt="Luiz Föeger"
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 md:group-hover:scale-110 grayscale md:grayscale md:group-hover:grayscale-0"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#8DCFFB]/20 to-transparent opacity-80 md:group-hover:opacity-40 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-linear-to-t/srgb from-[#050505] via-[#8DCFFB]/20 to-transparent opacity-80 md:group-hover:opacity-40 transition-opacity duration-500"></div>
                 <div className="absolute inset-0 opacity-[0.15] mix-blend-overlay pointer-events-none" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }}></div>
                 <div className="absolute bottom-6 left-6 z-10">
                     <a href="https://instagram.com/foeger.dev" target="_blank" rel="noopener noreferrer"><p className="font-montserrat text-xs md:text-2xl font-bold text-[#8DCFFB] mb-1">@foeger.dev</p></a>
@@ -45,11 +45,11 @@ const content = {
 
             <div className="w-full md:w-1/2 space-y-6 pb-10 md:pb-0">
                 <h3 className="font-montserrat text-4xl md:text-7xl font-black text-white uppercase tracking-tighter mb-4 md:mb-0">DESIGN DRIVEN <br /> DEVELOPER.</h3>
-                <p className="text-gray-300 text-base md:text-lg leading-relaxed">
+                <p className="text-gray-300 text-base md:text-lg md:leading-7 leading-relaxed">
                     Minha trajetória une a precisão do <span className="text-white font-semibold">Design Gráfico</span> com a lógica do <span className="text-white font-semibold">Desenvolvimento Full-Stack</span>. Essa combinação me permite criar <span className="text-white font-semibold">experiências digitais</span> como um todo: da estética à funcionalidade.
                 </p>
 
-                <p className="text-gray-300 text-base md:text-lg leading-relaxed">
+                <p className="text-gray-300 text-base md:text-lg md:leading-7 leading-relaxed">
                     Sou apaixonado por construir <span className="text-white font-semibold">ecossistemas digitais</span> completos. Utilizo ferramentas como
                     <strong className="text-[#8dcffb] font-bold hover:text-white transition-colors duration-300"> React</strong>,
                     <strong className="text-[#8dcffb] font-bold hover:text-white transition-colors duration-300"> Next.js</strong>,
@@ -59,7 +59,7 @@ const content = {
                     e <strong className="text-[#8dcffb] font-bold hover:text-white transition-colors duration-300">Docker</strong> para criar sistemas robustos e escaláveis.
                 </p>
 
-                <p className="text-gray-300 text-base md:text-lg leading-relaxed">
+                <p className="text-gray-300 text-base md:text-lg md:leading-7 leading-relaxed">
                     Meu foco principal é criar interfaces <span className="text-white font-semibold not-italic">criativas e intuitivas</span>, sempre com uma abordagem centrada na
                     Experiência do Usuário.
                 </p>

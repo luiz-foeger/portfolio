@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform, MotionValue } from 'motion/react';
 import { FiGithub, FiExternalLink } from 'react-icons/fi';
 
 // --- DADOS DOS PROJETOS (Mantidos iguais) ---
@@ -109,7 +109,7 @@ const Card = ({
                                 ))}
                             </div>
 
-                            <p className="text-sm md:text-lg text-white/80 leading-relaxed mb-4 md:mb-8">{description}</p>
+                            <p className="text-sm md:text-lg md:leading-7 text-white/80 leading-relaxed mb-4 md:mb-8">{description}</p>
                         </div>
 
                         <div className="flex items-center gap-6">
@@ -163,7 +163,7 @@ const Projects = () => {
                 >
                     Projetos Destaques
                 </motion.h2>
-                <motion.p className="text-white/90 text-sm sm:text-base md:text-2xl leading-relaxed text-center max-w-3xl mx-auto">
+                <motion.p className="text-white/90 text-sm sm:text-base sm:leading-6 md:text-2xl md:leading-8 leading-relaxed text-center max-w-3xl mx-auto">
                     Uma coleção de projetos que desafiaram minhas habilidades de design e código.
                 </motion.p>
             </div>

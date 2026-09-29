@@ -1,4 +1,6 @@
-import { motion } from "framer-motion";
+'use client';
+
+import { motion } from "motion/react";
 
 import Cursor from "../components/ui/Cursor";
 import HeroToHeader from "../components/common/HeroToHeader";

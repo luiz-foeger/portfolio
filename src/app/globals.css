@@ -1,0 +1,96 @@
+@import "tailwindcss";
+@import "./tailwind3-compat.css";
+
+@font-face {
+  font-family: 'Foeger Sans';
+  src: url('../assets/fonts/Foeger-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* as variáveis --ff-* vêm do next/font, no layout */
+@theme {
+  --font-foeger: "Foeger Sans", sans-serif;
+  --font-montserrat: var(--ff-montserrat), sans-serif;
+  --font-sans: var(--ff-lexend), sans-serif;
+  --font-bricolage: var(--ff-bricolage);
+  --font-bebas: var(--ff-bebas);
+}
+
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@layer base {
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        /* background-color: rgb(16, 23, 28) !important; */
+        background-color: #050505 !important;
+        color: #fff;
+        overscroll-behavior-y: none;
+        min-height: 100vh;
+        animation: fadeInAnimation ease 2s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        /* user-select: none; */
+    }
+
+    /* html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background: radial-gradient(circle, rgba(16, 23, 28, 1) 0%, rgba(5, 8, 10, 1) 100%);
+        animation: fadeInAnimation ease 2s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+        height: 100vh;
+    } */
+
+    /*
+    body {
+      cursor: none;
+    }
+
+    html, body, a, button, input, textarea, select, [role="button"] {
+      cursor: none !important;
+    }
+    */
+
+    div {
+        box-sizing: border-box;
+    }
+
+    /*
+    * {
+      cursor: none !important;
+    }
+    */
+}
+
+body.arrastando,
+body.arrastando * {
+  cursor: grabbing !important;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .custom-cursor {
+        display: none;
+    }
+
+    * {
+        cursor: auto !important;
+    }
+}

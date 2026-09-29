@@ -1,5 +1,5 @@
 import React from "react";
-import { motion, Variants } from "framer-motion";
+import { motion, Variants } from "motion/react";
 import { FaGithub, FaMapMarkerAlt, FaCircle, FaCheckDouble, FaInstagram } from "react-icons/fa";
 import { SiSpeedtest } from "react-icons/si";
 
@@ -36,7 +36,7 @@ const Bento: React.FC = () => {
       >
         
         <motion.div variants={itemVariants} className="mb-12">
-          <h2 className="text-3xl md:text-5xl font-black text-white leading-tight tracking-tight">
+          <h2 className="text-3xl md:text-5xl md:leading-none font-black text-white leading-tight tracking-tight">
             Engenharia <span className="text-cyan-500">&</span> <br className="md:hidden" /> Consistência.
           </h2>
           <p className="text-slate-400 text-lg mt-4 max-w-xl">
@@ -72,7 +72,7 @@ const Bento: React.FC = () => {
            {/* LINHA 1 - COLUNA 3: SOCIAL / BRANDING */}
            <motion.div 
               variants={itemVariants}
-              className="bg-gradient-to-br from-slate-800 to-slate-900 border border-white/5 rounded-3xl p-6 flex flex-col justify-between group hover:border-pink-500/20 transition-all"
+              className="bg-linear-to-br/srgb from-slate-800 to-slate-900 border border-white/5 rounded-3xl p-6 flex flex-col justify-between group hover:border-pink-500/20 transition-all"
            >
               <div className="w-10 h-10 bg-pink-500/10 rounded-full flex items-center justify-center group-hover:bg-pink-500/20 transition-colors">
                  <FaInstagram className="text-pink-500 text-xl" />

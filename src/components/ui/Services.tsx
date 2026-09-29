@@ -1,8 +1,8 @@
 'use client';
 import React, { useState } from 'react';
-import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValue, useSpring, AnimatePresence } from 'motion/react';
 import { FiArrowUpRight } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom';
+import { usePageTransition } from './PageTransition';
 
 const SERVICES = [
   {
@@ -36,7 +36,7 @@ const SERVICES = [
 ];
 
 const Services = () => {
-  const navigate = useNavigate(); 
+  const { navigate } = usePageTransition();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // física do mouse para as imagens
@@ -63,7 +63,7 @@ const Services = () => {
             <div className="sticky top-40">
               <div className="flex items-center gap-6 origin-top-left -rotate-90 absolute translate-y-[300px] opacity-60">
                 <span className="w-16 h-[1px] bg-neutral-500"></span>
-                <span className="font-['Bricolage_Grotesque'] font-bold text-neutral-400 tracking-[0.3em] uppercase text-xs whitespace-nowrap">
+                <span className="font-bricolage font-bold text-neutral-400 tracking-[0.3em] uppercase text-xs whitespace-nowrap">
                   Core Capabilities // Architecture
                 </span>
               </div>
@@ -102,10 +102,10 @@ const Services = () => {
 
                     {/* número + título */}
                     <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 relative z-10 pointer-events-none">
-                      <span className={`font-['Bricolage_Grotesque'] font-bold text-lg transition-colors duration-500 ${numberColor}`}>
+                      <span className={`font-bricolage font-bold text-lg transition-colors duration-500 ${numberColor}`}>
                         0{service.id}
                       </span>
-                      <h3 className={`font-['Bebas_Neue'] font-black text-[18vw] sm:text-[15vw] md:text-[12vw] lg:text-[6vw] leading-[0.85] tracking-wide sm:tracking-normal uppercase transition-colors duration-500 ${titleColor}`}>
+                      <h3 className={`font-bebas font-black text-[18vw] sm:text-[15vw] md:text-[12vw] lg:text-[6vw] leading-[0.85] tracking-wide sm:tracking-normal uppercase transition-colors duration-500 ${titleColor}`}>
                         {service.title}
                       </h3>
                     </div>
@@ -114,7 +114,7 @@ const Services = () => {
                     <div className={`flex items-center gap-6 mt-6 md:mt-0 transform transition-all duration-700 ease-out relative z-10 pointer-events-none ${isActive ? 'opacity-100 translate-x-0' : 'opacity-100 md:opacity-0 translate-x-0 md:-translate-x-6'}`}>
 
                       <div className="text-left md:text-right hidden sm:block">
-                        <p className="font-['Bricolage_Grotesque'] font-bold text-[5vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1.5vw] text-neutral-400 tracking-widest mb-1 whitespace-nowrap">
+                        <p className="font-bricolage font-bold text-[5vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1.5vw] text-neutral-400 tracking-widest mb-1 whitespace-nowrap">
                           {service.description}
                         </p>
                       </div>

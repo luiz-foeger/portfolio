@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'motion/react';
 import { HiArrowDown } from 'react-icons/hi2';
 import { AnimatedLogoHeader } from '../ui/AnimatedLogoHeader';
 
@@ -100,7 +100,7 @@ const HeroToHeader = () => {
                 >
                     <button 
                         onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} 
-                        className="block bg-transparent border-none p-0 cursor-pointer outline-none"
+                        className="block bg-transparent border-none p-0 cursor-pointer outline-hidden"
                     >
                         <AnimatedLogoHeader />
                     </button>

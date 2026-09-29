@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { motion, useMotionValue, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValue, AnimatePresence } from 'motion/react';
 import { useCursor } from '../ui/CursorContext';
 import { FaRegHandPaper, FaRegHandRock } from "react-icons/fa";
 
