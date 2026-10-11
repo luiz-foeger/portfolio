@@ -1,0 +1,62 @@
+// todo o texto da home nova, em português e inglês
+export type Idioma = 'pt' | 'en';
+export type IdServico = 'saas' | 'branding' | 'ux' | 'ui';
+
+export const EMAIL = 'foegerluiz@gmail.com';
+export const LINKS = [
+    { texto: 'Instagram', href: 'https://instagram.com/foeger.dev' },
+    { texto: 'LinkedIn', href: '#' },
+    { texto: 'Behance', href: '#' },
+    { texto: 'GitHub', href: 'https://github.com/luiz-foeger' },
+];
+
+export const TEXTOS = {
+    pt: {
+        inicio: 'Início',
+        menu: { servicos: 'Serviços', laboratorio: 'Laboratório', contato: 'Contato' },
+        manifesto: ['Marcas que funcionam.', 'Produtos com personalidade.', 'Do primeiro traço ao código.'],
+        servicos: [
+            { id: 'saas', nome: 'SaaS', texto: 'Da ideia ao produto no ar: estratégia, design e desenvolvimento.' },
+            { id: 'branding', nome: 'Branding', texto: 'Nome, identidade e um sistema visual que aguenta crescer.' },
+            { id: 'ux', nome: 'UX', texto: 'Pesquisa, fluxos e protótipos para o produto fazer sentido para quem usa.' },
+            { id: 'ui', nome: 'UI', texto: 'Interfaces com personalidade, desenhadas para virar código sem perder nada.' },
+        ] as { id: IdServico; nome: string; texto: string }[],
+        laboratorio: {
+            titulo: 'Laboratório',
+            texto: 'Estudos e projetos próprios. O primeiro é a Foeger Sans, a fonte da logo: desenhada do zero e ainda em processo.',
+            amostra: 'Föeger Sans',
+        },
+        contato: { chamada: 'Tem um projeto em mente?' },
+        demos: {
+            saas: { etapas: ['Ideia', 'Design', 'No ar'], titulo: 'Reservas', semana: 'esta semana', botao: 'Nova reserva', aviso: 'Nova reserva', agora: 'agora', aoVivo: 'ao vivo', dias: ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'] },
+            branding: { rotulo: 'Nome da marca', padrao: 'Aurora', direcao: 'Outra direção', cartao: 'contato' },
+            ux: { antes: 'Antes', depois: 'Depois', etapa: 'Etapa 1 de 3', nome: 'Nome', email: 'E-mail', continuar: 'Continuar', enviar: 'Enviar', cancelar: 'Cancelar', limpar: 'Limpar', legenda: 'O mesmo pedido, em etapas que fazem sentido.' },
+            ui: { peso: 'Peso', largura: 'Largura', escuro: 'Escuro', salvar: 'Salvar', salvo: 'Salvo', palavra: 'Personalidade' },
+        },
+    },
+    en: {
+        inicio: 'Home',
+        menu: { servicos: 'Services', laboratorio: 'Lab', contato: 'Contact' },
+        manifesto: ['Brands that work.', 'Products with character.', 'From first sketch to code.'],
+        servicos: [
+            { id: 'saas', nome: 'SaaS', texto: 'From idea to a live product: strategy, design and development.' },
+            { id: 'branding', nome: 'Branding', texto: 'Name, identity and a visual system built to grow.' },
+            { id: 'ux', nome: 'UX', texto: 'Research, flows and prototypes so the product makes sense to the people using it.' },
+            { id: 'ui', nome: 'UI', texto: 'Interfaces with character, designed to become code without losing anything.' },
+        ] as { id: IdServico; nome: string; texto: string }[],
+        laboratorio: {
+            titulo: 'Laboratory',
+            texto: 'Studies and personal projects. The first is Foeger Sans, the typeface behind the logo: drawn from scratch and still in progress.',
+            amostra: 'Föeger Sans',
+        },
+        contato: { chamada: 'Got a project in mind?' },
+        demos: {
+            saas: { etapas: ['Idea', 'Design', 'Live'], titulo: 'Bookings', semana: 'this week', botao: 'New booking', aviso: 'New booking', agora: 'now', aoVivo: 'live', dias: ['M', 'T', 'W', 'T', 'F', 'S', 'S'] },
+            branding: { rotulo: 'Brand name', padrao: 'Aurora', direcao: 'Another direction', cartao: 'hello' },
+            ux: { antes: 'Before', depois: 'After', etapa: 'Step 1 of 3', nome: 'Name', email: 'Email', continuar: 'Continue', enviar: 'Send', cancelar: 'Cancel', limpar: 'Clear', legenda: 'The same request, in steps that make sense.' },
+            ui: { peso: 'Weight', largura: 'Width', escuro: 'Dark', salvar: 'Save', salvo: 'Saved', palavra: 'Character' },
+        },
+    },
+};
+
+export type Textos = (typeof TEXTOS)['pt'];
