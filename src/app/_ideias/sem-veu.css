@@ -1,0 +1,9 @@
+/* as páginas novas nascem pretas: sem o fade de 2 s do html/body do globals.css, que começa com a página
+   transparente sobre o fundo branco do navegador (um véu cinza por cima da entrada da logo) */
+html:has([data-sem-veu]),
+html:has([data-sem-veu]) body {
+    animation: none !important;
+    opacity: 1 !important;
+    background: #050505 !important;
+    color-scheme: dark;
+}
