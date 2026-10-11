@@ -1,0 +1,11 @@
+/* a página da fonte é clara: o html e o body acompanham (vale mais que o sem-veu.css das páginas escuras) */
+html:has(main[data-tema="claro"]),
+html:has(main[data-tema="claro"]) body {
+    background: #E4E4E4 !important;
+    color-scheme: light;
+}
+
+main[data-tema="claro"] ::selection {
+    background: #111111;
+    color: #E4E4E4;
+}
