@@ -8,6 +8,8 @@ export const TIPO = {
     // estreito e pesado, em caixa alta: a parte brutalista
     titulo: { fontVariationSettings: eixos(96, 75, 800), fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 0.88, textTransform: 'uppercase' },
     frase: { fontVariationSettings: eixos(96, 100, 700), fontWeight: 700, letterSpacing: '-0.035em', lineHeight: 0.96 },
+    // o manifesto: a frase no peso máximo da Bricolage
+    manifesto: { fontVariationSettings: eixos(96, 100, 800), fontWeight: 800, letterSpacing: '-0.035em', lineHeight: 0.96 },
     // fina que engrossa perto do mouse (pesoFino)
     fina: { fontVariationSettings: eixos(96, 75, 200), fontWeight: 200, letterSpacing: '-0.015em', lineHeight: 0.88 },
     texto: { fontVariationSettings: eixos(14, 100, 400), fontWeight: 400, letterSpacing: '0', lineHeight: 1.45 },
