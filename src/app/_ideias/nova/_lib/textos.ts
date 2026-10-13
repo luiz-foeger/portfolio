@@ -5,8 +5,8 @@ export type IdServico = 'saas' | 'branding' | 'ux' | 'ui';
 export const EMAIL = 'foegerluiz@gmail.com';
 export const LINKS = [
     { texto: 'Instagram', href: 'https://instagram.com/foeger.dev' },
-    { texto: 'LinkedIn', href: '#' },
-    { texto: 'Behance', href: '#' },
+    { texto: 'LinkedIn', href: 'https://www.linkedin.com/in/luizfoeger' },
+    { texto: 'Behance', href: 'https://behance.net/foeger' },
     { texto: 'GitHub', href: 'https://github.com/luiz-foeger' },
 ];
 
