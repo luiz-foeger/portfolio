@@ -11,7 +11,8 @@ const RASTRO_FATOR = 0.55;
 const RASTRO_MAX = 26; // px na tela
 
 function borrarQueda(svg: SVGSVGElement | null, prefixo: string) {
-    if (!svg || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return () => { };
+    // nem com movimento reduzido nem em tela de toque (no celular o rastro fica esquisito)
+    if (!svg || window.matchMedia('(prefers-reduced-motion: reduce)').matches || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return () => { };
     const pecas = [...svg.querySelectorAll<SVGPathElement>('path[data-peca]')];
     const filtros = pecas.map((_, i) => svg.querySelector<SVGFEGaussianBlurElement>(`#${prefixo}-${i} feGaussianBlur`));
     const antes = pecas.map(() => NaN);
