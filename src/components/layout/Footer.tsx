@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 
+// o grupo tem nome para o texto subir só com o mouse no próprio link: a coluna em volta também é um group (o número
+// dela acende), e com o group sem nome todos os links da coluna subiam juntos
 const Links = ({ text, href, className = "" }: { text: string, href?: string, className?: string }) => {
   const Tag = href ? "a" : "button";
   return (
@@ -10,12 +12,12 @@ const Links = ({ text, href, className = "" }: { text: string, href?: string, cl
       href={href}
       target={href?.startsWith('http') ? "_blank" : "_self"}
       rel={href?.startsWith('http') ? "noopener noreferrer" : ""}
-      className={`group relative overflow-hidden inline-flex ${className}`}
+      className={`group/link relative overflow-hidden inline-flex ${className}`}
     >
-      <span className="transition-transform duration-500 group-hover:-translate-y-full">
+      <span className="transition-transform duration-500 group-hover/link:-translate-y-full">
         {text}
       </span>
-      <span className="absolute inset-0 transition-transform duration-500 translate-y-full group-hover:translate-y-0 text-white">
+      <span className="absolute inset-0 transition-transform duration-500 translate-y-full group-hover/link:translate-y-0 text-white">
         {text}
       </span>
     </Tag>
