@@ -103,42 +103,6 @@ const Footer = () => {
   return (
     <footer className="w-full min-h-screen bg-[#050505] text-white flex flex-col justify-between p-6 md:p-8 lg:p-12 relative z-20 border-t border-white/10 font-sans">
 
-      {/* navigation superior */}
-      <div className="font-bricolage font-bold text-[4vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1vw] grid grid-cols-2 md:grid-cols-4 w-full items-start uppercase tracking-[0.2em]">
-
-        <div className="font-bricolage items-start md:items-start flex flex-col gap-2">
-          <Links text="INFO" href="#" className="text-neutral-500 w-fit hover:text-white" />
-          <Links text="CONTACT" href="#" className="text-neutral-500 w-fit hover:text-white" />
-        </div>
-
-        <div className="flex flex-col gap-2 items-end md:items-start md:pr-10 pb-10">
-          <Links text="GITHUB" href="https://github.com/luiz-foeger" className="text-neutral-500 w-fit hover:text-white" />
-          <Links text="LINKEDIN" href="https://www.linkedin.com/in/luizfoeger" className="text-neutral-500 w-fit hover:text-white" />
-          <Links text="BEHANCE" href="https://behance.net/foeger" className="text-neutral-500 w-fit hover:text-white" />
-        </div>
-
-        <div className="flex flex-col gap-2 md:items-end md:pr-10 pb-10">
-          <span onClick={handleScrollToTop} className="w-fit">
-            <Links text="INDEX" className="text-neutral-500 hover:text-white" />
-          </span>
-        </div>
-
-        <div className="flex flex-col gap-2 items-end md:items-end text-right md:pr-10">
-          <div className="flex font-mono text-white normal-case leading-none font-bold text-[4vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1vw] tracking-widest items-center">
-            {mounted ? (
-              <>
-                <FlipNumber value={time.hours} />
-                <span className="mx-[2px] animate-pulse relative -top-[1px]">:</span>
-                <FlipNumber value={time.minutes} />
-                <span className="mx-[2px] animate-pulse text-neutral-500 relative -top-[1px]">:</span>
-                <span className="text-neutral-500"><FlipNumber value={time.seconds} /></span>
-              </>
-            ) : <span>--:--:--</span>}
-          </div>
-          <span className="font-bold text-neutral-500">BRAZIL</span>
-        </div>
-      </div>
-
       {/* centro */}
       <div className="flex-grow flex flex-col justify-center items-center py-16 md:py-24 w-full">
 
@@ -184,58 +148,65 @@ const Footer = () => {
         </h1>
       </div>
 
-      {/* baseline */}
-      {/* [1] @FOEGER.DEV */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-6 w-full items-start">
+      {/* baseline: os links e o relógio, que ficavam em cima do e-mail, nas quatro colunas numeradas; no celular, em
+          duas colunas, uma de cada lado, como eles ficavam em cima */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-12 md:gap-6 w-full items-start">
 
-        <div className="flex flex-col group">
+        {/* [1] INFO, CONTACT */}
+        <div className="font-bricolage flex flex-col group">
           <span className="text-base md:text-xl md:leading-7 leading-none -mt-[3px] text-neutral-600 mb-2 font-bricolage transition-colors group-hover:text-white">
             [1]
           </span>
-          <h3 className="text-xl lg:text-2xl uppercase font-bricolage font-bold tracking-widest text-white mb-2">
-            <Links text="@FOEGER.DEV" href="https://instagram.com/foeger.dev" />
-          </h3>
+          <div className="flex flex-col gap-2 font-bold uppercase tracking-[0.2em] text-lg md:text-xl lg:text-2xl">
+            <Links text="INFO" href="#" className="text-neutral-500 w-fit hover:text-white" />
+            <Links text="CONTACT" href="#" className="text-neutral-500 w-fit hover:text-white" />
+          </div>
         </div>
 
-        {/* [2] 23—26 */}
-        <div className="font-bricolage flex flex-col group">
+        {/* [2] redes */}
+        <div className="font-bricolage flex flex-col group items-end text-right md:items-start md:text-left">
           <span className="text-base md:text-xl md:leading-7 leading-none -mt-[3px] text-neutral-600 mb-2 font-bricolage transition-colors group-hover:text-white">
             [2]
           </span>
-          <h3 className="text-xl lg:text-2xl uppercase font-bricolage font-bold tracking-widest text-white mb-4">
-            23—{currentYear}
-          </h3>
-          <p className="text-neutral-400 normal-case leading-relaxed text-[4.5vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1vw] pr-2">
-            The architecture fills its space with clean code and uncompromising design, building high-performance products tailored for modern demands.
-          </p>
+          <div className="flex flex-col gap-2 items-end md:items-start font-bold uppercase tracking-[0.2em] text-lg md:text-xl lg:text-2xl">
+            <Links text="GITHUB" href="https://github.com/luiz-foeger" className="text-neutral-500 w-fit hover:text-white" />
+            <Links text="LINKEDIN" href="https://www.linkedin.com/in/luizfoeger" className="text-neutral-500 w-fit hover:text-white" />
+            <Links text="BEHANCE" href="https://behance.net/foeger" className="text-neutral-500 w-fit hover:text-white" />
+            <Links text="INSTAGRAM" href="https://instagram.com/foeger.dev" className="text-neutral-500 w-fit hover:text-white" />
+          </div>
         </div>
 
-        {/* [3] STATUS */}
+        {/* [3] INDEX */}
         <div className="font-bricolage flex flex-col group md:items-end md:text-right">
           <span className="text-base md:text-xl md:leading-7 leading-none -mt-[3px] text-neutral-600 mb-2 font-bricolage transition-colors group-hover:text-white">
             [3]
           </span>
-          <h3 className="text-xl lg:text-2xl uppercase font-bricolage font-bold tracking-widest text-white mb-4">
-            STATUS
-          </h3>
-          <p className="text-neutral-400 normal-case leading-relaxed text-[4.5vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1vw] mix-blend-difference">
-            Available for new projects.
-          </p>
+          <div className="flex flex-col gap-2 md:items-end font-bold uppercase tracking-[0.2em] text-lg md:text-xl lg:text-2xl">
+            <span onClick={handleScrollToTop} className="w-fit">
+              <Links text="INDEX" className="text-neutral-500 hover:text-white" />
+            </span>
+          </div>
         </div>
 
-        {/* [4] SCOPE */}
-        <div className="font-bricolage flex flex-col group md:items-end md:text-right">
-          <div className="flex flex-col items-start md:items-end">
-            <span className="text-base md:text-xl md:leading-7 leading-none -mt-[3px] text-neutral-600 mb-2 font-bricolage transition-colors group-hover:text-white">
-              [4]
-            </span>
-            <h3 className="text-xl lg:text-2xl uppercase font-bricolage font-bold tracking-widest text-white mb-4">
-              SCOPE
-            </h3>
+        {/* [4] relógio */}
+        <div className="font-bricolage flex flex-col group items-end text-right">
+          <span className="text-base md:text-xl md:leading-7 leading-none -mt-[3px] text-neutral-600 mb-2 font-bricolage transition-colors group-hover:text-white">
+            [4]
+          </span>
+          <div className="flex flex-col gap-2 items-end font-bold uppercase tracking-[0.2em] text-lg md:text-xl lg:text-2xl">
+            <div className="flex font-mono text-white normal-case leading-none font-bold tracking-widest items-center">
+              {mounted ? (
+                <>
+                  <FlipNumber value={time.hours} />
+                  <span className="mx-[2px] animate-pulse relative -top-[1px]">:</span>
+                  <FlipNumber value={time.minutes} />
+                  <span className="mx-[2px] animate-pulse text-neutral-500 relative -top-[1px]">:</span>
+                  <span className="text-neutral-500"><FlipNumber value={time.seconds} /></span>
+                </>
+              ) : <span>--:--:--</span>}
+            </div>
+            <span className="text-neutral-500">BRAZIL</span>
           </div>
-          <p className="text-neutral-400 normal-case text-[4.5vw] sm:text-[3.5vw] md:text-[2.5vw] lg:text-[1vw] leading-relaxed max-w-[250px]">
-            4/4
-          </p>
         </div>
 
       </div>
