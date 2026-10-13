@@ -13,7 +13,7 @@ import ManifestoComum from '../_comum/Manifesto';
 import Cabecalho from './_components/Cabecalho';
 import Servicos from './_components/Servicos';
 import Laboratorio from './_components/Laboratorio';
-import Contato from './_components/Contato';
+import Footer from '../../../components/layout/Footer';
 import { useTexto } from './_lib/idioma';
 import { TIPO } from './_lib/tipo';
 
@@ -25,7 +25,10 @@ export default function Nova() {
             <ManifestoComum linhas={t.manifesto} estilo={TIPO.manifesto} entrada="pontos-de-baixo" />
             <Servicos />
             <Laboratorio />
-            <Contato />
+            {/* o rodapé do site; o id é o destino do "Contato" do menu */}
+            <div id="contato">
+                <Footer />
+            </div>
         </main>
     );
 }
