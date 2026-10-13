@@ -1,12 +1,14 @@
 'use client';
 
 import { Fragment, useEffect, useId, useMemo, useRef } from 'react';
-import { useReducedMotion, type MotionValue } from 'motion/react';
-import { limitar, useProgresso } from './progresso';
+import { animate, useMotionValue, useReducedMotion, type MotionValue } from 'motion/react';
+import { limitar, useProgresso, useToque } from './progresso';
 import { useBorrao } from './borrao';
 
 // o manifesto se escreve com a rolagem, preso no meio da tela, centralizado e no tamanho do manifesto do site de
-// hoje (ScrollManifesto: de 12vw no celular a 6vw no desktop). Três entradas:
+// hoje (ScrollManifesto: de 12vw no celular a 6vw no desktop). Em tela de toque ele se monta sozinho, por tempo,
+// quando chega à tela, e sem rastro: com o dedo, montar a frase rolando várias telas cansava, e o rastro tremia.
+// Três entradas:
 // - 'pontos-de-baixo': as duas de baixo juntas. Cada palavra sobe de trás da linha ainda feita de pontinhos soltos,
 //   que incham e se juntam no caminho e viram a palavra quando ela assenta;
 // - 'de-baixo': palavra por palavra, cada uma sobe de trás da própria linha (uma máscara do tamanho da palavra) e
@@ -17,6 +19,8 @@ export type EntradaManifesto = 'pontos-de-baixo' | 'de-baixo' | 'pontos';
 
 const TAMANHO = 'text-[12vw] sm:text-[10vw] md:text-[7.5vw] lg:text-[6vw]';
 const INICIO = 0.06;
+const TEMPO_TOQUE = 2.4; // s para a frase inteira se montar sozinha numa tela de toque
+const VISIVEL_TOQUE = 0.6; // fração do bloco preso que precisa estar na tela para a montagem começar
 const DESFOQUE = 0.22; // em em
 const LIMIAR = 0.4; // alfa a partir do qual o borrão vira mancha
 const DURO = 60; // inclinação do limiar: alto = borda nítida mesmo com o borrão largo
@@ -43,18 +47,40 @@ export default function Manifesto({ linhas, estilo, entrada = 'pontos', id }: { 
     const { alvo, filtro } = useBorrao<HTMLDivElement>('v');
     const cada = (1 - INICIO - 0.08) / linhas.length;
 
+    // tela de toque: o progresso vem do tempo, não da rolagem. Quando o bloco preso entra na tela, a frase se monta
+    // sozinha em TEMPO_TOQUE; a seção fica curta (uma tela e pouco), só para a frase não fugir enquanto se monta
+    const toque = useToque();
+    const fixo = useRef<HTMLDivElement>(null);
+    const pTempo = useMotionValue(0);
+    useEffect(() => {
+        const el = fixo.current;
+        if (!toque || !el) return;
+        let animacao: ReturnType<typeof animate> | null = null;
+        const observador = new IntersectionObserver(([e]) => {
+            if (!e.isIntersecting || animacao) return;
+            animacao = animate(pTempo, 1, { duration: TEMPO_TOQUE, ease: 'linear' });
+            observador.disconnect();
+        }, { threshold: VISIVEL_TOQUE });
+        observador.observe(el);
+        return () => {
+            observador.disconnect();
+            animacao?.stop();
+        };
+    }, [toque, pTempo]);
+    const progresso = toque ? pTempo : p;
+
     return (
-        <section id={id} ref={secao} className="relative h-[300vh] md:h-[320vh]">
+        <section id={id} ref={secao} className={toque ? 'relative h-[140svh]' : 'relative h-[300vh] md:h-[320vh]'}>
             {filtro}
-            <div className="sticky top-0 flex h-svh items-center px-4 sm:px-8">
+            <div ref={fixo} className="sticky top-0 flex h-svh items-center px-4 sm:px-8">
                 <div ref={alvo} className="w-full">
                     <div className={`mx-auto max-w-7xl text-center ${TAMANHO}`} style={estilo}>
                         {entrada === 'pontos' ? (
                             linhas.map((linha, i) => (
-                                <LinhaQueNasce key={`${i}-${linha}`} texto={linha} indice={i} progresso={p} faixa={[INICIO + i * cada, INICIO + (i + 1) * cada - 0.02]} reduzido={reduzido} />
+                                <LinhaQueNasce key={`${i}-${linha}`} texto={linha} indice={i} progresso={progresso} faixa={[INICIO + i * cada, INICIO + (i + 1) * cada - 0.02]} reduzido={reduzido} />
                             ))
                         ) : (
-                            <PalavrasQueSobem linhas={linhas} progresso={p} reduzido={reduzido} pontos={entrada === 'pontos-de-baixo'} />
+                            <PalavrasQueSobem linhas={linhas} progresso={progresso} reduzido={reduzido} semRastro={toque} pontos={entrada === 'pontos-de-baixo'} />
                         )}
                     </div>
                 </div>
@@ -200,7 +226,8 @@ const SOBE_PONTO = 0.45; // em: o quanto cada ponto vem atrás da palavra
 const RASTRO_PALAVRA = 1.2; // borrão por px que a palavra andou no quadro
 const RASTRO_PALAVRA_MAX = 0.25; // em
 
-function PalavrasQueSobem({ linhas, progresso, reduzido, pontos }: { linhas: string[]; progresso: MotionValue<number>; reduzido: boolean; pontos: boolean }) {
+// semRastro: tela de toque, as palavras sobem sem o rastro vertical
+function PalavrasQueSobem({ linhas, progresso, reduzido, semRastro, pontos }: { linhas: string[]; progresso: MotionValue<number>; reduzido: boolean; semRastro: boolean; pontos: boolean }) {
     const bloco = useRef<HTMLDivElement>(null);
     const prefixo = `manifesto-sobe-${useId().replace(/[^\w-]/g, '')}`;
     // as palavras de cada linha, com o número delas na ordem de leitura
@@ -275,7 +302,7 @@ function PalavrasQueSobem({ linhas, progresso, reduzido, pontos }: { linhas: str
                     c.style.transform = y > 0.0005 ? `translateY(${y.toFixed(4)}em)` : 'none';
                     yAntes[i] = px;
                 }
-                rastro[i] += (Math.min(RASTRO_PALAVRA_MAX * tamanho, andou * RASTRO_PALAVRA) - rastro[i]) * 0.4;
+                rastro[i] += (Math.min(RASTRO_PALAVRA_MAX * tamanho, andou * (semRastro ? 0 : RASTRO_PALAVRA)) - rastro[i]) * 0.4;
                 if (rastro[i] <= 0.3) rastro[i] = 0;
                 if (pontos) {
                     // sem máscara, a palavra que ainda não começou fica apagada
@@ -320,7 +347,7 @@ function PalavrasQueSobem({ linhas, progresso, reduzido, pontos }: { linhas: str
             observador.disconnect();
             cancelAnimationFrame(quadro);
         };
-    }, [progresso, reduzido, prefixo, porLinha, pontos]);
+    }, [progresso, reduzido, semRastro, prefixo, porLinha, pontos]);
 
     // cada palavra é um bloco em linha com a palavra dentro, que sobe com transform; sem os pontos, esse bloco corta o
     // que passa da borda (a máscara). Dentro da palavra o texto segue corrido (com os pontos, letra por letra em

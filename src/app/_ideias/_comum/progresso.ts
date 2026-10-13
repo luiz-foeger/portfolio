@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type RefObject } from 'react';
+import { useEffect, useState, useSyncExternalStore, type RefObject } from 'react';
 import { useMotionValue } from 'motion/react';
 
 export const limitar = (v: number, min = 0, max = 1) => Math.min(max, Math.max(min, v));
@@ -39,6 +39,23 @@ export function useTela() {
         return () => window.removeEventListener('resize', medir);
     }, []);
     return tela;
+}
+
+// tela de toque (sem mouse): no celular a rolagem vem em trancos e com embalo, então o que acompanha a rolagem ou a
+// velocidade dela muda de jeito. ehToque serve dentro de efeitos; useToque, no render (no servidor e na primeira
+// passada é false, o mesmo do desktop, e logo em seguida vira o valor do aparelho)
+const MOUSE = '(hover: hover) and (pointer: fine)';
+export const ehToque = () => !window.matchMedia(MOUSE).matches;
+export function useToque() {
+    return useSyncExternalStore(
+        aviso => {
+            const consulta = window.matchMedia(MOUSE);
+            consulta.addEventListener('change', aviso);
+            return () => consulta.removeEventListener('change', aviso);
+        },
+        ehToque,
+        () => false,
+    );
 }
 
 // mouse de verdade (no celular não há cursor nem hover)

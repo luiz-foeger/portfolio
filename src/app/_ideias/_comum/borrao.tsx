@@ -6,7 +6,8 @@ import { useReducedMotion } from 'motion/react';
 // desfoque de movimento: borra só na direção em que a coisa anda, na medida da velocidade, como os jogos fazem
 // para o movimento parecer mais fluido. A velocidade é o quanto o próprio elemento andou na tela desde o quadro
 // anterior (preso num sticky, não anda e não borra); lerVelocidade troca isso por outra fonte, em px por quadro.
-// Parado, o filtro sai (filter: none), porque desfoque em letra grande pesa
+// Parado, o filtro sai (filter: none), porque desfoque em letra grande pesa. Em tela de toque não borra: a rolagem
+// com o dedo vem em trancos e com embalo, e o rastro fica tremido
 export function useBorrao<T extends HTMLElement>(eixo: 'v' | 'h', { lerVelocidade, fator = 0.45, maximo = 14 }: { lerVelocidade?: () => number; fator?: number; maximo?: number } = {}) {
     const id = `borrao-${useId().replace(/[^\w-]/g, '')}`;
     const alvo = useRef<T>(null);
@@ -18,7 +19,7 @@ export function useBorrao<T extends HTMLElement>(eixo: 'v' | 'h', { lerVelocidad
     useEffect(() => {
         const el = alvo.current;
         const blur = desfoque.current;
-        if (!el || !blur || reduzido) return;
+        if (!el || !blur || reduzido || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
         let atual = 0;
         let ligado = false;
         let visivel = true;
