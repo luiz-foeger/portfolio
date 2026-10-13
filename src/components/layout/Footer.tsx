@@ -113,8 +113,8 @@ const Footer = () => {
 
         <div className="flex flex-col gap-2 items-end md:items-start md:pr-10 pb-10">
           <Links text="GITHUB" href="https://github.com/luiz-foeger" className="text-neutral-500 w-fit hover:text-white" />
-          <Links text="LINKEDIN" href="#" className="text-neutral-500 w-fit hover:text-white" />
-          <Links text="BEHANCE" href="#" className="text-neutral-500 w-fit hover:text-white" />
+          <Links text="LINKEDIN" href="https://www.linkedin.com/in/luizfoeger" className="text-neutral-500 w-fit hover:text-white" />
+          <Links text="BEHANCE" href="https://behance.net/foeger" className="text-neutral-500 w-fit hover:text-white" />
         </div>
 
         <div className="flex flex-col gap-2 md:items-end md:pr-10 pb-10">
