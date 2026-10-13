@@ -22,6 +22,14 @@ const Links = ({ text, href, className = "" }: { text: string, href?: string, cl
   );
 };
 
+// cada letra do e-mail troca dentro da sua própria janela, do tamanho da linha, aberta dos lados para não cortar o
+// encaixe com a vizinha. O "@" desce uns 0,05em além da linha: a janela dele vai até o pé e ele anda essa altura a
+// mais, com uns pixels de folga para o arredondamento das telas pequenas (com a janela única do tamanho da linha, ele
+// ficava cortado parado e deixava um pedaço em cima depois do hover)
+const JANELA_LETRA = 'inset(0 -0.2em)';
+const JANELA_ARROBA = 'inset(-1px -0.2em calc(-0.06em - 1px) -0.2em)';
+const PASSO_ARROBA = { paddingBottom: 'calc(0.05em + 3px)', marginBottom: 'calc(-0.05em - 3px)' };
+
 const FlipDigit = ({ char }: { char: string }) => {
   return (
     <div className="relative inline-flex overflow-hidden items-center justify-center leading-none">
@@ -136,23 +144,26 @@ const Footer = () => {
           href={`mailto:${email}`}
           initial="initial"
           whileHover="hover"
-          className="font-bricolage text-[8.5vw] lg:text-[9.25vw] mb-1 md:mb-0 font-black text-white leading-[0.8] tracking-tighter uppercase drop-shadow-2xl relative overflow-hidden"
+          className="font-bricolage text-[8.5vw] lg:text-[9.25vw] mb-1 md:mb-0 font-black text-white leading-[0.8] tracking-tighter uppercase drop-shadow-2xl relative"
+          style={{ clipPath: 'inset(-1em 0)' }}
         >
           <motion.div className="flex" variants={staggerHover}>
-            {email.split('').map((char, i) => (
-              <motion.span key={i} variants={charVariantOut} className="inline-block">
-                {char}
-              </motion.span>
-            ))}
-          </motion.div>
+            {email.split('').map((char, i) => {
+              const arroba = char === '@';
+              // a coluna só repassa o atraso do stagger para as duas letras dela
+              return (
+                <motion.span key={i} variants={{}} className="relative inline-block" style={{ clipPath: arroba ? JANELA_ARROBA : JANELA_LETRA }}>
+                  <motion.span variants={charVariantOut} className="inline-block" style={arroba ? PASSO_ARROBA : undefined}>
+                    {char}
+                  </motion.span>
 
-          {/* Texto que entra (Branco puro tbm, como pedido) */}
-          <motion.div className="absolute top-0 left-0 flex" variants={staggerHover}>
-            {email.split('').map((char, i) => (
-              <motion.span key={i} variants={charVariantIn} className="inline-block text-white">
-                {char}
-              </motion.span>
-            ))}
+                  {/* Texto que entra (Branco puro tbm, como pedido) */}
+                  <motion.span variants={charVariantIn} className="absolute top-0 left-0 inline-block text-white" style={arroba ? PASSO_ARROBA : undefined}>
+                    {char}
+                  </motion.span>
+                </motion.span>
+              );
+            })}
           </motion.div>
         </motion.a>
 
