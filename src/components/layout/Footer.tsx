@@ -178,8 +178,9 @@ const Footer = () => {
                 </h1>
             </div> */}
 
+        {/* a trajetória: o ano em que começou e o atual, que vira sozinho */}
         <h1 className="font-bricolage text-[8.5vw] lg:text-[9.25vw] font-black text-white leading-[0.8] tracking-tighter uppercase drop-shadow-2xl">
-          ©2026
+          ©23-{currentYear}
         </h1>
       </div>
 
