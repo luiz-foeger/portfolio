@@ -39,13 +39,44 @@ const sorteio = (i: number) => {
 };
 const saida = (t: number) => 1 - Math.pow(1 - t, 3);
 
-export default function Manifesto({ linhas, estilo, entrada = 'pontos', id }: { linhas: string[]; estilo: React.CSSProperties; entrada?: EntradaManifesto; id?: string }) {
+// continuação: depois que a frase se monta, a rolagem segue presa na mesma tela por mais `vh` (no toque, `vhToque`
+// de svh, porque lá a frase se monta por tempo) e `Componente` desenha por cima dela. A frase se apaga no trecho
+// `apagaFrase` do progresso da continuação. O componente recebe esse progresso (0 a 1), o bloco do texto (para achar
+// a palavra de ordem `palavra`, contando todas na ordem de leitura) e o tamanho e o estilo da letra, para repeti-la igual
+export type ContinuacaoProps = {
+    progresso: MotionValue<number>;
+    texto: React.RefObject<HTMLDivElement | null>;
+    palavra: number;
+    tamanho: string;
+    estilo: React.CSSProperties;
+};
+export type Continuacao = {
+    vh: number;
+    vhToque: number;
+    apagaFrase: readonly [number, number];
+    palavra: number;
+    Componente: React.ComponentType<ContinuacaoProps>;
+};
+
+export default function Manifesto({ linhas, estilo, entrada = 'pontos', id, continuacao }: {
+    linhas: string[];
+    estilo: React.CSSProperties;
+    entrada?: EntradaManifesto;
+    id?: string;
+    continuacao?: Continuacao;
+}) {
     const secao = useRef<HTMLElement>(null);
     const p = useProgresso(secao);
     const reduzido = useReducedMotion() ?? false;
     // quando a seção acaba, o bloco sai com a rolagem e borra junto
     const { alvo, filtro } = useBorrao<HTMLDivElement>('v');
     const cada = (1 - INICIO - 0.08) / linhas.length;
+    // a seção cresce com o texto, para cada palavra ter a mesma rolagem qualquer que seja ele (com as 11 palavras do
+    // texto antigo dá 300vh no celular e 320vh no desktop), e a continuação ganha um trecho só dela, no fim. fracao é a
+    // parte da rolagem que é das palavras
+    const palavras = linhas.join(' ').split(/\s+/).filter(Boolean).length;
+    const extra = continuacao ? continuacao.vh : 0;
+    const fracao = (palavras * 20) / (palavras * 20 + extra);
 
     // tela de toque: o progresso vem do tempo, não da rolagem. Quando o bloco preso entra na tela, a frase se monta
     // sozinha em TEMPO_TOQUE; a seção fica curta (uma tela e pouco), só para a frase não fugir enquanto se monta
@@ -69,21 +100,51 @@ export default function Manifesto({ linhas, estilo, entrada = 'pontos', id }: { 
     }, [toque, pTempo]);
     const progresso = toque ? pTempo : p;
 
+    // o progresso da continuação: no desktop, a parte da rolagem depois da das palavras; no toque, o que passa dos
+    // 40svh em que a frase se monta
+    const temContinuacao = !!continuacao;
+    const vhToque = continuacao?.vhToque ?? 0;
+    const [apagaDe, apagaAte] = continuacao?.apagaFrase ?? [0, 1];
+    const pDepois = useMotionValue(0);
+    const texto = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (!temContinuacao) return;
+        const bloco = texto.current;
+        const atualizar = (v: number) => {
+            const d = toque ? limitar((v * (40 + vhToque) - 40) / vhToque) : limitar((v - fracao) / (1 - fracao));
+            pDepois.set(d);
+            const a = limitar((d - apagaDe) / (apagaAte - apagaDe));
+            if (bloco) bloco.style.opacity = String(1 - (a < 0.5 ? 4 * a * a * a : 1 - Math.pow(-2 * a + 2, 3) / 2));
+        };
+        atualizar(p.get());
+        const parar = p.on('change', atualizar);
+        return () => {
+            parar();
+            if (bloco) bloco.style.opacity = '';
+        };
+    }, [p, pDepois, toque, fracao, vhToque, apagaDe, apagaAte, temContinuacao]);
+
     return (
-        <section id={id} ref={secao} className={toque ? 'relative h-[140svh]' : 'relative h-[300vh] md:h-[320vh]'}>
+        <section
+            id={id}
+            ref={secao}
+            className={toque ? 'relative h-[140svh]' : 'relative h-[calc(100vh_+_var(--palavras)_*_18.2vh_+_var(--extra)_*_1vh)] md:h-[calc(100vh_+_var(--palavras)_*_20vh_+_var(--extra)_*_1vh)]'}
+            style={{ '--palavras': palavras, '--extra': extra, ...(toque && continuacao ? { height: `calc(140svh + ${vhToque}svh)` } : {}) } as React.CSSProperties}
+        >
             {filtro}
             <div ref={fixo} className="sticky top-0 flex h-svh items-center px-4 sm:px-8">
                 <div ref={alvo} className="w-full">
-                    <div className={`mx-auto max-w-7xl text-center ${TAMANHO}`} style={estilo}>
+                    <div ref={texto} className={`mx-auto max-w-7xl text-center ${TAMANHO}`} style={estilo}>
                         {entrada === 'pontos' ? (
                             linhas.map((linha, i) => (
-                                <LinhaQueNasce key={`${i}-${linha}`} texto={linha} indice={i} progresso={progresso} faixa={[INICIO + i * cada, INICIO + (i + 1) * cada - 0.02]} reduzido={reduzido} />
+                                <LinhaQueNasce key={`${i}-${linha}`} texto={linha} indice={i} progresso={progresso} faixa={[(INICIO + i * cada) * fracao, (INICIO + (i + 1) * cada - 0.02) * fracao]} reduzido={reduzido} />
                             ))
                         ) : (
-                            <PalavrasQueSobem linhas={linhas} progresso={progresso} reduzido={reduzido} semRastro={toque} pontos={entrada === 'pontos-de-baixo'} />
+                            <PalavrasQueSobem linhas={linhas} progresso={progresso} reduzido={reduzido} semRastro={toque} pontos={entrada === 'pontos-de-baixo'} fracao={fracao} />
                         )}
                     </div>
                 </div>
+                {continuacao && <continuacao.Componente progresso={pDepois} texto={texto} palavra={continuacao.palavra} tamanho={TAMANHO} estilo={estilo} />}
             </div>
         </section>
     );
@@ -226,8 +287,9 @@ const SOBE_PONTO = 0.45; // em: o quanto cada ponto vem atrás da palavra
 const RASTRO_PALAVRA = 1.2; // borrão por px que a palavra andou no quadro
 const RASTRO_PALAVRA_MAX = 0.25; // em
 
-// semRastro: tela de toque, as palavras sobem sem o rastro vertical
-function PalavrasQueSobem({ linhas, progresso, reduzido, semRastro, pontos }: { linhas: string[]; progresso: MotionValue<number>; reduzido: boolean; semRastro: boolean; pontos: boolean }) {
+// semRastro: tela de toque, as palavras sobem sem o rastro vertical. fracao: a parte da rolagem que é das palavras (o
+// resto é da continuação)
+function PalavrasQueSobem({ linhas, progresso, reduzido, semRastro, pontos, fracao }: { linhas: string[]; progresso: MotionValue<number>; reduzido: boolean; semRastro: boolean; pontos: boolean; fracao: number }) {
     const bloco = useRef<HTMLDivElement>(null);
     const prefixo = `manifesto-sobe-${useId().replace(/[^\w-]/g, '')}`;
     // as palavras de cada linha, com o número delas na ordem de leitura
@@ -287,9 +349,10 @@ function PalavrasQueSobem({ linhas, progresso, reduzido, semRastro, pontos }: { 
             const v = progresso.get();
             if (v === vAntes && !rastro.some(r => r > 0)) return;
             vAntes = v;
+            const vp = Math.min(1, v / fracao);
             const tamanho = parseFloat(getComputedStyle(el).fontSize) || 100;
             cada.forEach((c, i) => {
-                const t = limitar((v - inicio[i]) / duracao);
+                const t = limitar((vp - inicio[i]) / duracao);
                 if (reduzido) {
                     c.style.transform = 'none';
                     c.style.opacity = t.toFixed(3);
@@ -347,7 +410,7 @@ function PalavrasQueSobem({ linhas, progresso, reduzido, semRastro, pontos }: { 
             observador.disconnect();
             cancelAnimationFrame(quadro);
         };
-    }, [progresso, reduzido, semRastro, prefixo, porLinha, pontos]);
+    }, [progresso, reduzido, semRastro, prefixo, porLinha, pontos, fracao]);
 
     // cada palavra é um bloco em linha com a palavra dentro, que sobe com transform; sem os pontos, esse bloco corta o
     // que passa da borda (a máscara). Dentro da palavra o texto segue corrido (com os pontos, letra por letra em
