@@ -8,6 +8,7 @@ import '../sem-veu.css';
 const bricolage = Bricolage_Grotesque({ subsets: ['latin', 'latin-ext'], axes: ['opsz', 'wdth'], variable: '--ff-bricolage-w' });
 const foeger = localFont({ src: '../../../assets/fonts/Foeger-Regular.woff', variable: '--ff-foeger', display: 'swap' });
 
+// só vale se esta pasta virar rota: na home, quem dá o título é src/app/page.tsx, e ela fica aberta ao Google
 export const metadata: Metadata = {
     title: 'Föeger',
     robots: { index: false, follow: false },

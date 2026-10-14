@@ -1,8 +1,8 @@
 'use client';
 
-// Home nova da marca Föeger, guardada sem uso: _ideias é uma pasta privada do Next (o _ tira do roteamento), então
-// nada daqui vira página no site.
-// Parte do site de hoje (a logo animada que vira o cabeçalho) e soma o que foi aprovado nas simulações: uma fonte
+// Home da marca Föeger. _ideias é uma pasta privada do Next (o _ tira do roteamento): quem põe esta página no / é
+// src/app/page.tsx, com o layout daqui em volta.
+// Parte do site antigo (a logo animada que vira o cabeçalho) e soma o que foi aprovado nas simulações: uma fonte
 // só (Bricolage), o manifesto que sobe dos pontos com desfoque de movimento, a letra fina que engrossa nos serviços
 // e o e-mail de ponta a ponta. Sem azul claro, sem stacks e sem trabalhos antigos: os serviços se demonstram
 // funcionando e o laboratório guarda os estudos próprios, começando pela Foeger Sans.
@@ -11,8 +11,7 @@
 // claro (serviços e laboratório; o rodapé continua o de sempre). O cabeçalho fica em modo diferença, para o logo
 // aparecer no claro e por cima das imagens.
 // Português por padrão, com inglês no cabeçalho (na primeira visita, segue o idioma do navegador).
-// Para publicar em /nova: mover nova/, _comum/ e sem-veu.css de _ideias para src/app/ e tirar um ../ do caminho da
-// fonte em nova/layout.tsx. As imagens do ato ficam em public/nova-escala.
+// As imagens do ato ficam em public/nova-escala.
 import { useEffect, useRef, useState } from 'react';
 import ManifestoComum, { TAMANHO } from '../_comum/Manifesto';
 import Cabecalho from './_components/Cabecalho';
