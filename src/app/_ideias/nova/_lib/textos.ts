@@ -14,7 +14,14 @@ export const TEXTOS = {
     pt: {
         inicio: 'Início',
         menu: { servicos: 'Serviços', laboratorio: 'Laboratório', contato: 'Contato' },
-        manifesto: ['Marcas que funcionam.', 'Produtos com personalidade.', 'Do primeiro traço ao código.'],
+        // o manifesto em arranjos de linhas, do mais largo ao mais estreito (vale o primeiro que cabe sem quebrar), com
+        // a palavra da escala (centro) no meio exato da linha do meio; palavras: os verbos que ela vira no ato da
+        // escala, na ordem dele, todos encaixando na frase
+        manifesto: {
+            centro: 'escalam',
+            arranjos: [['SaaS e marcas', 'que escalam com', 'design e código.'], ['SaaS', 'e marcas que', 'escalam', 'com design', 'e código.']],
+            palavras: ['se adaptam', 'performam', 'resolvem'],
+        },
         servicos: [
             { id: 'saas', nome: 'SaaS', texto: 'Da ideia ao produto no ar: estratégia, design e desenvolvimento.' },
             { id: 'branding', nome: 'Branding', texto: 'Nome, identidade e um sistema visual que aguenta crescer.' },
@@ -37,7 +44,11 @@ export const TEXTOS = {
     en: {
         inicio: 'Home',
         menu: { servicos: 'Services', laboratorio: 'Lab', contato: 'Contact' },
-        manifesto: ['Brands that work.', 'Products with character.', 'From first sketch to code.'],
+        manifesto: {
+            centro: 'scale',
+            arranjos: [['SaaS and brands', 'that scale with', 'design and code.'], ['SaaS and', 'brands that', 'scale', 'with design', 'and code.']],
+            palavras: ['adapt', 'perform', 'solve'],
+        },
         servicos: [
             { id: 'saas', nome: 'SaaS', texto: 'From idea to a live product: strategy, design and development.' },
             { id: 'branding', nome: 'Branding', texto: 'Name, identity and a visual system built to grow.' },
