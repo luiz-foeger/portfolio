@@ -25,9 +25,11 @@ const DEMOS: Record<IdServico, (p: { ativo: boolean }) => React.ReactNode> = {
     ui: p => <DemoUi {...p} />,
 };
 
-export default function Servicos() {
+// claro: a letra escura, para quando a página passa para o tema claro (o fundo vem de quem chama; os palcos das
+// demonstrações continuam escuros)
+export default function Servicos({ claro = false }: { claro?: boolean }) {
     const { w } = useTela();
-    return w < 768 ? <ServicosEmLista /> : <ServicosComPalco />;
+    return w < 768 ? <ServicosEmLista claro={claro} /> : <ServicosComPalco claro={claro} />;
 }
 
 // letra fina que engrossa: perto do mouse no desktop; no celular, a palavra que passa pelo meio da tela
@@ -83,7 +85,7 @@ function Nome({ nome, inicio, letras, style, className }: { nome: string; inicio
     );
 }
 
-function ServicosComPalco() {
+function ServicosComPalco({ claro }: { claro: boolean }) {
     const t = useTexto();
     const { idioma } = useIdioma();
     const lenis = useLenis();
@@ -141,7 +143,7 @@ function ServicosComPalco() {
                                 key={x.id}
                                 onClick={() => ir(i)}
                                 aria-current={i === ativo}
-                                className={`w-fit whitespace-nowrap text-left transition-colors duration-500 ${i === ativo ? 'text-white' : 'text-white/25 hover:text-white/60'}`}
+                                className={`w-fit whitespace-nowrap text-left transition-colors duration-500 ${i === ativo ? (claro ? 'text-[#050505]' : 'text-white') : claro ? 'text-[#050505]/25 hover:text-[#050505]/60' : 'text-white/25 hover:text-white/60'}`}
                                 style={{ ...TIPO.fina, fontSize: tamanho ? `${tamanho}px` : '9vw' }}
                             >
                                 <Nome nome={x.nome} inicio={inicio} letras={letras} />
@@ -155,7 +157,7 @@ function ServicosComPalco() {
                         <AnimatePresence initial={false} mode="wait">
                             <motion.p
                                 key={`${s.id}-${idioma}`}
-                                className="absolute inset-x-0 bottom-0 max-w-[36ch] text-white/65"
+                                className={`absolute inset-x-0 bottom-0 max-w-[36ch] ${claro ? 'text-[#050505]/65' : 'text-white/65'}`}
                                 initial={{ opacity: 0, y: 12 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -8 }}
@@ -174,7 +176,7 @@ function ServicosComPalco() {
     );
 }
 
-function ServicosEmLista() {
+function ServicosEmLista({ claro }: { claro: boolean }) {
     const t = useTexto();
     const { idioma } = useIdioma();
     const letras = useRef<(HTMLSpanElement | null)[]>([]);
@@ -212,7 +214,7 @@ function ServicosEmLista() {
                     const inicio = indice;
                     indice += x.nome.length;
                     return (
-                        <ServicoNaLista key={x.id} id={x.id} texto={x.texto}>
+                        <ServicoNaLista key={x.id} id={x.id} texto={x.texto} claro={claro}>
                             <h3 className="whitespace-nowrap" style={{ ...TIPO.fina, fontSize: tamanho ? `${tamanho}px` : '20vw' }}>
                                 <Nome nome={x.nome} inicio={inicio} letras={letras} />
                             </h3>
@@ -224,12 +226,12 @@ function ServicosEmLista() {
     );
 }
 
-function ServicoNaLista({ id, texto, children }: { id: IdServico; texto: string; children: React.ReactNode }) {
+function ServicoNaLista({ id, texto, claro, children }: { id: IdServico; texto: string; claro: boolean; children: React.ReactNode }) {
     const { ref, naTela } = useNaTela<HTMLDivElement>(0.4);
     return (
         <div className="flex flex-col gap-4">
             {children}
-            <p className="max-w-[34ch] text-base text-white/65" style={TIPO.texto}>{texto}</p>
+            <p className={`max-w-[34ch] text-base ${claro ? 'text-[#050505]/65' : 'text-white/65'}`} style={TIPO.texto}>{texto}</p>
             <div ref={ref}>
                 <Palco>{DEMOS[id]({ ativo: naTela })}</Palco>
             </div>

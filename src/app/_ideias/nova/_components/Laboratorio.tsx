@@ -12,7 +12,8 @@ import { TIPO } from '../_lib/tipo';
 // escrita com a própria fonte. Ela ainda não tem pontuação além de ponto e vírgula, então a amostra só usa letras
 const ALFABETO = ['ABCDEFGHIJKLM', 'NOPQRSTUVWXYZ', 'abcdefghijklm', 'nopqrstuvwxyz', '0123456789'];
 
-export default function Laboratorio() {
+// claro: a letra escura, para quando a página passa para o tema claro (o fundo vem de quem chama)
+export default function Laboratorio({ claro = false }: { claro?: boolean }) {
     const t = useTexto().laboratorio;
     const { idioma } = useIdioma();
     const trilho = useRef<HTMLDivElement>(null);
@@ -60,14 +61,14 @@ export default function Laboratorio() {
             </div>
 
             <div className="grid gap-y-10 px-[4vw] pb-[22vh] md:grid-cols-12 md:gap-x-[4vw]">
-                <p className="max-w-[34ch] text-lg text-white/65 md:col-span-4 md:text-xl" style={TIPO.texto}>
+                <p className={`max-w-[34ch] text-lg md:col-span-4 md:text-xl ${claro ? 'text-[#050505]/65' : 'text-white/65'}`} style={TIPO.texto}>
                     {t.texto}
                 </p>
                 <div className="md:col-span-8">
                     <p className="text-[19vw] leading-[0.95] md:text-[10vw]" style={{ fontFamily: 'var(--ff-foeger)' }} lang="pt-BR">
                         {t.amostra}
                     </p>
-                    <div className="mt-[5vh] flex flex-col gap-1 text-[7.4vw] leading-[1.08] text-white/80 md:text-[3.4vw]" style={{ fontFamily: 'var(--ff-foeger)' }} aria-hidden>
+                    <div className={`mt-[5vh] flex flex-col gap-1 text-[7.4vw] leading-[1.08] md:text-[3.4vw] ${claro ? 'text-[#050505]/80' : 'text-white/80'}`} style={{ fontFamily: 'var(--ff-foeger)' }} aria-hidden>
                         {ALFABETO.map(linha => <span key={linha} className="break-all">{linha}</span>)}
                     </div>
                 </div>
