@@ -17,7 +17,8 @@ import { useBorrao } from './borrao';
 //   aprovado na simulação: desfoque + limiar num filtro SVG), também com o rastro vertical
 export type EntradaManifesto = 'pontos-de-baixo' | 'de-baixo' | 'pontos';
 
-const TAMANHO = 'text-[12vw] sm:text-[10vw] md:text-[7.5vw] lg:text-[6vw]';
+// exportado para quem precisa medir o bloco do manifesto (a home nova escolhe o arranjo da frase que cabe nele)
+export const TAMANHO = 'text-[12vw] sm:text-[10vw] md:text-[7.5vw] lg:text-[6vw]';
 const INICIO = 0.06;
 const TEMPO_TOQUE = 2.4; // s para a frase inteira se montar sozinha numa tela de toque
 const VISIVEL_TOQUE = 0.6; // fração do bloco preso que precisa estar na tela para a montagem começar
@@ -58,12 +59,16 @@ export type Continuacao = {
     Componente: React.ComponentType<ContinuacaoProps>;
 };
 
-export default function Manifesto({ linhas, estilo, entrada = 'pontos', id, continuacao }: {
+// centro: a ordem (contando todas as palavras na ordem de leitura) da palavra que fica no meio exato da linha dela, com
+// as outras da linha encostadas de cada lado (só nas entradas de baixo). Com um número ímpar de linhas e ela na do
+// meio, ela fica no meio da tela
+export default function Manifesto({ linhas, estilo, entrada = 'pontos', id, continuacao, centro }: {
     linhas: string[];
     estilo: React.CSSProperties;
     entrada?: EntradaManifesto;
     id?: string;
     continuacao?: Continuacao;
+    centro?: number;
 }) {
     const secao = useRef<HTMLElement>(null);
     const p = useProgresso(secao);
@@ -140,7 +145,7 @@ export default function Manifesto({ linhas, estilo, entrada = 'pontos', id, cont
                                 <LinhaQueNasce key={`${i}-${linha}`} texto={linha} indice={i} progresso={progresso} faixa={[(INICIO + i * cada) * fracao, (INICIO + (i + 1) * cada - 0.02) * fracao]} reduzido={reduzido} />
                             ))
                         ) : (
-                            <PalavrasQueSobem linhas={linhas} progresso={progresso} reduzido={reduzido} semRastro={toque} pontos={entrada === 'pontos-de-baixo'} fracao={fracao} />
+                            <PalavrasQueSobem linhas={linhas} progresso={progresso} reduzido={reduzido} semRastro={toque} pontos={entrada === 'pontos-de-baixo'} fracao={fracao} centro={centro} />
                         )}
                     </div>
                 </div>
@@ -287,9 +292,22 @@ const SOBE_PONTO = 0.45; // em: o quanto cada ponto vem atrás da palavra
 const RASTRO_PALAVRA = 1.2; // borrão por px que a palavra andou no quadro
 const RASTRO_PALAVRA_MAX = 0.25; // em
 
+// o espaço que não quebra, que encosta as palavras na do centro (ele também leva o word-spacing)
+const ESPACO_FIXO = String.fromCharCode(160);
+
+type PalavraDaLinha = { texto: string; indice: number };
+
 // semRastro: tela de toque, as palavras sobem sem o rastro vertical. fracao: a parte da rolagem que é das palavras (o
-// resto é da continuação)
-function PalavrasQueSobem({ linhas, progresso, reduzido, semRastro, pontos, fracao }: { linhas: string[]; progresso: MotionValue<number>; reduzido: boolean; semRastro: boolean; pontos: boolean; fracao: number }) {
+// resto é da continuação). centro: a palavra que fica no meio exato da linha dela
+function PalavrasQueSobem({ linhas, progresso, reduzido, semRastro, pontos, fracao, centro }: {
+    linhas: string[];
+    progresso: MotionValue<number>;
+    reduzido: boolean;
+    semRastro: boolean;
+    pontos: boolean;
+    fracao: number;
+    centro?: number;
+}) {
     const bloco = useRef<HTMLDivElement>(null);
     const prefixo = `manifesto-sobe-${useId().replace(/[^\w-]/g, '')}`;
     // as palavras de cada linha, com o número delas na ordem de leitura
@@ -427,26 +445,41 @@ function PalavrasQueSobem({ linhas, progresso, reduzido, semRastro, pontos, frac
                     </filter>
                 ))}
             </svg>
-            {porLinha.map((palavras, li) => (
-                <span key={`${li}-${linhas[li]}`} className="block" style={{ wordSpacing: `${FOLGA.lado * 2}em` }}>
-                    <span className="sr-only">{linhas[li]}</span>
-                    <span aria-hidden>
-                        {palavras.map(({ texto, indice }, pi) => (
-                            <Fragment key={indice}>
-                                {pi > 0 && ' '}
-                                <span
-                                    className={pontos ? 'inline-block align-top' : 'inline-block overflow-hidden align-top'}
-                                    style={{ padding: `${FOLGA.cima}em ${FOLGA.lado}em ${FOLGA.baixo}em`, margin: `-${FOLGA.cima}em -${FOLGA.lado}em -${FOLGA.baixo}em` }}
-                                >
-                                    <span data-palavra className="inline-block" style={pontos ? { transform: `translateY(${DESCE_PONTOS}em)`, opacity: 0 } : { transform: `translateY(${DESCE}em)` }}>
-                                        {pontos ? [...texto].map((letra, j) => <span key={j} data-letra className="relative">{letra}</span>) : texto}
-                                    </span>
-                                </span>
-                            </Fragment>
-                        ))}
+            {porLinha.map((palavras, li) => {
+                const palavra = ({ texto }: PalavraDaLinha) => (
+                    <span
+                        className={pontos ? 'inline-block align-top' : 'inline-block overflow-hidden align-top'}
+                        style={{ padding: `${FOLGA.cima}em ${FOLGA.lado}em ${FOLGA.baixo}em`, margin: `-${FOLGA.cima}em -${FOLGA.lado}em -${FOLGA.baixo}em` }}
+                    >
+                        <span data-palavra className="inline-block" style={pontos ? { transform: `translateY(${DESCE_PONTOS}em)`, opacity: 0 } : { transform: `translateY(${DESCE}em)` }}>
+                            {pontos ? [...texto].map((letra, j) => <span key={j} data-letra className="relative">{letra}</span>) : texto}
+                        </span>
                     </span>
-                </span>
-            ))}
+                );
+                const corrido = (lista: PalavraDaLinha[]) => lista.map((p, pi) => (
+                    <Fragment key={p.indice}>
+                        {pi > 0 && ' '}
+                        {palavra(p)}
+                    </Fragment>
+                ));
+                // a linha da palavra do centro é uma grade de três colunas, as dos lados iguais: a palavra fica no meio
+                // exato e as outras encostam nela de cada lado, com o espaço de sempre entre elas
+                const k = centro === undefined ? -1 : palavras.findIndex(p => p.indice === centro);
+                return (
+                    <span key={`${li}-${linhas[li]}`} className="block" style={{ wordSpacing: `${FOLGA.lado * 2}em` }}>
+                        <span className="sr-only">{linhas[li]}</span>
+                        {k < 0 ? (
+                            <span aria-hidden>{corrido(palavras)}</span>
+                        ) : (
+                            <span aria-hidden className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] whitespace-nowrap">
+                                <span className="text-right">{corrido(palavras.slice(0, k))}{k > 0 && ESPACO_FIXO}</span>
+                                <span>{palavra(palavras[k])}</span>
+                                <span className="text-left">{k < palavras.length - 1 && ESPACO_FIXO}{corrido(palavras.slice(k + 1))}</span>
+                            </span>
+                        )}
+                    </span>
+                );
+            })}
         </div>
     );
 }
