@@ -8,8 +8,8 @@
 // entrega (_components/Pontilhado.tsx), e o laboratório guarda os estudos próprios, começando pela Foeger Sans.
 // O manifesto continua no ato da escala (_components/Expansao.tsx): a palavra da escala fica no meio exato da tela,
 // troca e cresce com a rolagem e, no fim, a haste do "l" dela cobre a tela com o claro; daí a página segue no tema
-// claro (serviços e laboratório; o rodapé continua o de sempre). O cabeçalho fica em modo diferença, para o logo
-// aparecer no claro e por cima das imagens.
+// claro (serviços e laboratório; o rodapé continua o de sempre). O cabeçalho (só a logo e o idioma, sem menu) fica em
+// modo diferença, para aparecer no claro e por cima das imagens.
 // Português por padrão, com inglês no cabeçalho (na primeira visita, segue o idioma do navegador).
 // As imagens do ato ficam em public/nova-escala.
 import { useEffect, useRef, useState } from 'react';
@@ -86,7 +86,6 @@ export default function Nova() {
     const centro = ordemDoCentro(linhas, t.manifesto.centro);
     return (
         <main className="bg-[#050505] text-white">
-            <style>{'nav.fixed { mix-blend-mode: difference; }'}</style>
             {regua}
             <Cabecalho />
             {/* a chave refaz o manifesto quando o idioma ou o arranjo mudam: a cópia da palavra começa de novo */}
@@ -105,7 +104,7 @@ export default function Nova() {
                 <Pontilhado />
                 <Laboratorio claro />
             </div>
-            {/* o rodapé do site; o id é o destino do "Contato" do menu */}
+            {/* o rodapé do site (o id fica como âncora do contato) */}
             <div id="contato">
                 <Footer />
             </div>
