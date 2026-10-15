@@ -23,10 +23,10 @@ export const TEXTOS = {
             palavras: ['se adaptam', 'performam', 'resolvem'],
         },
         servicos: [
-            { id: 'saas', nome: 'SaaS', texto: 'Da ideia ao produto no ar: estratégia, design e desenvolvimento.' },
-            { id: 'branding', nome: 'Branding', texto: 'Nome, identidade e um sistema visual que aguenta crescer.' },
-            { id: 'ux', nome: 'UX', texto: 'Pesquisa, fluxos e protótipos para o produto fazer sentido para quem usa.' },
-            { id: 'ui', nome: 'UI', texto: 'Interfaces com personalidade, desenhadas para virar código sem perder nada.' },
+            { id: 'saas', nome: 'Produto', texto: 'Da ideia ao SaaS no ar: estratégia, design e desenvolvimento.' },
+            { id: 'branding', nome: 'Identidade', texto: 'Nome, logo e um sistema visual que aguenta crescer.' },
+            { id: 'ux', nome: 'Experiência', texto: 'Pesquisa de UX, fluxos e protótipos para o produto fazer sentido para quem usa.' },
+            { id: 'ui', nome: 'Interface', texto: 'UI com personalidade, desenhada para virar código sem perder nada.' },
         ] as { id: IdServico; nome: string; texto: string }[],
         laboratorio: {
             titulo: 'Laboratório',
@@ -50,10 +50,10 @@ export const TEXTOS = {
             palavras: ['adapt', 'perform', 'solve'],
         },
         servicos: [
-            { id: 'saas', nome: 'SaaS', texto: 'From idea to a live product: strategy, design and development.' },
-            { id: 'branding', nome: 'Branding', texto: 'Name, identity and a visual system built to grow.' },
-            { id: 'ux', nome: 'UX', texto: 'Research, flows and prototypes so the product makes sense to the people using it.' },
-            { id: 'ui', nome: 'UI', texto: 'Interfaces with character, designed to become code without losing anything.' },
+            { id: 'saas', nome: 'Product', texto: 'From idea to a live SaaS: strategy, design and development.' },
+            { id: 'branding', nome: 'Identity', texto: 'Name, logo and a visual system built to grow.' },
+            { id: 'ux', nome: 'Experience', texto: 'UX research, flows and prototypes so the product makes sense to the people using it.' },
+            { id: 'ui', nome: 'Interface', texto: 'UI with character, designed to become code without losing anything.' },
         ] as { id: IdServico; nome: string; texto: string }[],
         laboratorio: {
             titulo: 'Laboratory',
