@@ -15,6 +15,7 @@ import DemoBranding from './demos/DemoBranding';
 import DemoUx from './demos/DemoUx';
 import DemoUi from './demos/DemoUi';
 
+// fora da home desde 15/10/2026 (ela usa o Pontilhado); guardado para continuar depois.
 // serviços demonstrados: em vez de imagem de trabalho, cada serviço mostra, funcionando, o que ele entrega.
 // No desktop os nomes ficam à esquerda (finos, engrossam perto do mouse) e o palco à direita troca de demonstração
 // conforme a rolagem; clicar num nome leva até ele. No celular, cada serviço vem com o seu palco embaixo

@@ -3,9 +3,9 @@
 // Home da marca Föeger. _ideias é uma pasta privada do Next (o _ tira do roteamento): quem põe esta página no / é
 // src/app/page.tsx, com o layout daqui em volta.
 // Parte do site antigo (a logo animada que vira o cabeçalho) e soma o que foi aprovado nas simulações: uma fonte
-// só (Bricolage), o manifesto que sobe dos pontos com desfoque de movimento, a letra fina que engrossa nos serviços
-// e o e-mail de ponta a ponta. Sem azul claro, sem stacks e sem trabalhos antigos: os serviços se demonstram
-// funcionando e o laboratório guarda os estudos próprios, começando pela Foeger Sans.
+// só (Bricolage), o manifesto que sobe dos pontos com desfoque de movimento e o e-mail de ponta a ponta. Sem azul
+// claro, sem stacks e sem trabalhos antigos: os serviços são pontos que voam com a rolagem e desenham o que cada um
+// entrega (_components/Pontilhado.tsx), e o laboratório guarda os estudos próprios, começando pela Foeger Sans.
 // O manifesto continua no ato da escala (_components/Expansao.tsx): a palavra da escala fica no meio exato da tela,
 // troca e cresce com a rolagem e, no fim, a haste do "l" dela cobre a tela com o claro; daí a página segue no tema
 // claro (serviços e laboratório; o rodapé continua o de sempre). O cabeçalho fica em modo diferença, para o logo
@@ -15,7 +15,7 @@
 import { useEffect, useRef, useState } from 'react';
 import ManifestoComum, { TAMANHO } from '../_comum/Manifesto';
 import Cabecalho from './_components/Cabecalho';
-import Servicos from './_components/Servicos';
+import Pontilhado from './_components/Pontilhado';
 import Laboratorio from './_components/Laboratorio';
 import { APAGA_FRASE, AtoContexto, ExpansaoJanelas, FUNDO_CLARO } from './_components/Expansao';
 import Footer from '../../../components/layout/Footer';
@@ -102,7 +102,7 @@ export default function Nova() {
             </AtoContexto.Provider>
             {/* o tema claro: o fim do ato cobre a tela com este fundo, e a página segue nele */}
             <div style={{ background: FUNDO_CLARO, color: '#050505' }}>
-                <Servicos claro />
+                <Pontilhado />
                 <Laboratorio claro />
             </div>
             {/* o rodapé do site; o id é o destino do "Contato" do menu */}
