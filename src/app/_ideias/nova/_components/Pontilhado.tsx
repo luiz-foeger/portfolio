@@ -7,13 +7,18 @@ import { useIdioma, useTexto } from '../_lib/idioma';
 import type { IdServico } from '../_lib/textos';
 import { TIPO } from '../_lib/tipo';
 
-// os serviços em pontos: a seção presa e uma nuvem de pontos que muda de forma com a rolagem. Cada serviço tem dois
-// estados: o nome feito de pontos e um desenho do que ele entrega (o painel do Produto, a identidade com tipo e cores,
-// o fluxo de telas da Experiência, os componentes da Interface), também de pontos. Entre um estado e outro, os pontos
-// voam em bando, em curva, da esquerda para a direita. No desktop o voo fica preso à rolagem (linear e reversível) e
-// os pontos fogem do mouse; no toque, a rolagem só escolhe o estado e o voo anda sozinho. O texto do serviço aparece
-// embaixo quando a forma assenta
+// os serviços em pontos: a seção presa e uma nuvem de pontos que muda de forma com a rolagem. Cinco itens, cada um
+// com dois estados: o nome feito de pontos e um desenho, também de pontos. Abre com o processo (o painel no ar, com
+// barras, a linha subindo e o ponto ao vivo) e segue a ordem de um projeto, da marca até quem usa: a identidade (o
+// anel com o tipo e as cores), a interface (uma tela com chave, controle e botão), o produto (no computador e no
+// celular) e a experiência (um rosto rindo, com brilhos em volta). Entre um estado e outro, os pontos voam em
+// bando, em curva, da esquerda para a direita. No desktop o voo fica preso à rolagem (linear e reversível) e os
+// pontos fogem do mouse; no toque, a rolagem só escolhe o estado e o voo anda sozinho. O texto aparece embaixo quando
+// a forma assenta
 type P = [number, number];
+type Estado = { id: 'processo' | IdServico; palavra: boolean; nome: string; texto: string };
+// depois do processo, os serviços na ordem de um projeto
+const ORDEM: IdServico[] = ['branding', 'ui', 'saas', 'ux'];
 
 const TINTA = '#050505';
 
@@ -26,7 +31,7 @@ const sorteio = (i: number) => {
 };
 
 // os desenhos, numa caixa centrada (u e v de 0 a 1)
-function desenhar(g: CanvasRenderingContext2D, estado: { id: IdServico; palavra: boolean; nome: string }, familia: string, W: number, H: number) {
+function desenhar(g: CanvasRenderingContext2D, estado: Estado, familia: string, W: number, H: number) {
     const cx = W / 2;
     const cy = H * 0.45;
     if (estado.palavra) {
@@ -65,8 +70,8 @@ function desenhar(g: CanvasRenderingContext2D, estado: { id: IdServico; palavra:
         g.arc(X(u), Y(v), r * bw, 0, Math.PI * 2);
         g.fill();
     };
-    if (estado.id === 'saas') {
-        // o painel no ar: barras, a linha subindo e o ponto ao vivo
+    if (estado.id === 'processo') {
+        // o processo: o painel no ar (o desenho que era do produto), com barras, a linha subindo e o ponto ao vivo
         caixa(0, 0, 1, 1, 0.035);
         [0.3, 0.48, 0.38, 0.6, 0.5, 0.7].forEach((h, i) => caixa(0.08 + i * 0.142, 0.9 - h, 0.085, h, 0.008, true));
         linha([[0.08, 0.5], [0.22, 0.38], [0.36, 0.44], [0.5, 0.28], [0.64, 0.32], [0.78, 0.18], [0.9, 0.2]], lw * 0.85);
@@ -82,35 +87,76 @@ function desenhar(g: CanvasRenderingContext2D, estado: { id: IdServico; palavra:
         g.textBaseline = 'middle';
         g.fillText('Aa', X(0.34), Y(0.53));
         [0.08, 0.39, 0.7].forEach(v => caixa(0.72, v, 0.2, 0.22, 0.012, true));
-    } else if (estado.id === 'ux') {
-        // o fluxo: três telas em sequência, com setas
-        [0, 0.37, 0.74].forEach(u => {
-            caixa(u, 0.06, 0.26, 0.88, 0.02);
-            caixa(u + 0.03, 0.2, 0.14, 0.06, 0.006, true);
-            caixa(u + 0.03, 0.33, 0.2, 0.04, 0.006, true);
-            caixa(u + 0.03, 0.42, 0.16, 0.04, 0.006, true);
-            caixa(u + 0.03, 0.7, 0.2, 0.12, 0.03, true);
-        });
-        [0.27, 0.64].forEach(u => {
-            linha([[u, 0.5], [u + 0.08, 0.5]]);
-            linha([[u + 0.055, 0.44], [u + 0.08, 0.5], [u + 0.055, 0.56]]);
-        });
+    } else if (estado.id === 'ui') {
+        // a interface: a tela com cabeçalho e título, e três cartões com uma chave ligada, um controle deslizante e um
+        // botão (a tela que era do design, com os controles que eram da interface)
+        caixa(0, 0, 1, 1, 0.035);
+        caixa(0, 0, 1, 0.13, 0.035, true);
+        caixa(0.06, 0.22, 0.46, 0.07, 0.01, true);
+        caixa(0.06, 0.33, 0.3, 0.04, 0.01, true);
+        [0.06, 0.37, 0.68].forEach(u => caixa(u, 0.46, 0.26, 0.44, 0.02));
+        caixa(0.11, 0.6, 0.16, 0.13, 0.04);
+        bola(0.23, 0.665, 0.027);
+        linha([[0.42, 0.68], [0.58, 0.68]], lw * 1.1);
+        linha([[0.42, 0.68], [0.52, 0.68]], lw * 2.2);
+        bola(0.52, 0.68, 0.034);
+        caixa(0.72, 0.62, 0.18, 0.12, 0.035, true);
+    } else if (estado.id === 'saas') {
+        // o produto: o computador com o painel no ar e o celular com o app (os aparelhos que eram do código, com o
+        // produto dentro)
+        caixa(0, 0.04, 0.68, 0.74, 0.03);
+        caixa(0.29, 0.78, 0.1, 0.09, 0.004, true);
+        caixa(0.21, 0.87, 0.26, 0.04, 0.012, true);
+        caixa(0.04, 0.11, 0.6, 0.07, 0.01, true);
+        [0.16, 0.26, 0.22, 0.34, 0.3, 0.42].forEach((h, i) => caixa(0.06 + i * 0.095, 0.7 - h, 0.06, h, 0.006, true));
+        bola(0.62, 0.27, 0.018);
+        caixa(0.76, 0.18, 0.22, 0.76, 0.05);
+        caixa(0.795, 0.27, 0.15, 0.045, 0.01, true);
+        caixa(0.795, 0.36, 0.15, 0.22, 0.02);
+        caixa(0.795, 0.8, 0.15, 0.07, 0.03, true);
     } else {
-        // a interface: chave, controle deslizante, botão e caixa marcada num cartão
-        caixa(0.06, 0, 0.88, 1, 0.035);
-        caixa(0.16, 0.13, 0.17, 0.15, 0.05);
-        bola(0.27, 0.205, 0.04);
-        linha([[0.16, 0.5], [0.66, 0.5]], lw * 0.7);
-        linha([[0.16, 0.5], [0.46, 0.5]], lw * 1.4);
-        bola(0.46, 0.5, 0.034);
-        caixa(0.16, 0.7, 0.3, 0.16, 0.05, true);
-        caixa(0.58, 0.7, 0.1, 0.16, 0.01);
-        linha([[0.6, 0.79], [0.625, 0.83], [0.67, 0.74]]);
+        // a experiência: quem usa, empolgado; os olhos rindo, a boca aberta num sorriso grande, a cabeça um pouco
+        // inclinada e três brilhos em volta (as medidas do rosto em raios, a partir do centro)
+        const r = bh * 0.46;
+        const fx = (a: number) => X(0.5) + a * r;
+        const fy = (b: number) => Y(0.5) + b * r;
+        g.lineWidth = lw * 1.9;
+        g.beginPath();
+        g.arc(fx(0), fy(0), r, 0, Math.PI * 2);
+        g.stroke();
+        // os brilhos: estrelas de quatro pontas (centro e tamanho)
+        const brilhos: [number, number, number][] = [[1.38, -0.78, 0.3], [1.62, -0.3, 0.15], [-1.45, -0.55, 0.2]];
+        brilhos.forEach(([a, b, s]) => {
+            g.beginPath();
+            for (let i = 0; i < 8; i++) {
+                const angulo = -Math.PI / 2 + (i * Math.PI) / 4;
+                const q = (i % 2 ? 0.28 * s : s) * r;
+                g.lineTo(fx(a) + Math.cos(angulo) * q, fy(b) + Math.sin(angulo) * q);
+            }
+            g.fill();
+        });
+        g.save();
+        g.translate(fx(0), fy(0));
+        g.rotate(-0.1);
+        g.translate(-fx(0), -fy(0));
+        g.lineWidth = lw * 2.2;
+        [-0.36, 0.36].forEach(a => {
+            g.beginPath();
+            g.arc(fx(a), fy(-0.2), 0.15 * r, Math.PI * 1.08, Math.PI * 1.92);
+            g.stroke();
+        });
+        g.beginPath();
+        g.moveTo(fx(-0.52), fy(0.1));
+        g.quadraticCurveTo(fx(0), fy(0.22), fx(0.52), fy(0.1));
+        g.bezierCurveTo(fx(0.49), fy(0.55), fx(0.26), fy(0.7), fx(0), fy(0.7));
+        g.bezierCurveTo(fx(-0.26), fy(0.7), fx(-0.49), fy(0.55), fx(-0.52), fy(0.1));
+        g.fill();
+        g.restore();
     }
 }
 
 // sorteia os pontos dentro da tinta de cada forma, da esquerda para a direita (o bando voa sem se cruzar tanto)
-function amostrar(estado: Parameters<typeof desenhar>[1], familia: string, W: number, H: number, n: number, passo: number, semente: number): P[] {
+function amostrar(estado: Estado, familia: string, W: number, H: number, n: number, passo: number, semente: number): P[] {
     const cv = document.createElement('canvas');
     cv.width = W;
     cv.height = H;
@@ -143,8 +189,12 @@ export default function Pontilhado() {
     const textoDaLegenda = useRef<HTMLSpanElement>(null);
     const legenda = useRef<HTMLParagraphElement>(null);
     const p = useProgresso(secao);
-    const servicos = t.servicos;
-    const estados = servicos.flatMap(s => [{ id: s.id, palavra: true, nome: s.nome, texto: s.texto }, { id: s.id, palavra: false, nome: s.nome, texto: s.texto }]);
+    // o processo e, depois dele, os serviços na ordem de um projeto; cada um com o nome e o desenho
+    const itens: { id: Estado['id']; nome: string; texto: string }[] = [
+        { id: 'processo', nome: t.processo.nome, texto: t.processo.texto },
+        ...ORDEM.map(id => t.servicos.find(s => s.id === id)!),
+    ];
+    const estados: Estado[] = itens.flatMap(s => [{ ...s, palavra: true }, { ...s, palavra: false }]);
     const E = estados.length;
 
     useEffect(() => {
@@ -301,7 +351,7 @@ export default function Pontilhado() {
         <section id="servicos" ref={secao} className="relative" style={{ height: `${E * 55 + 100}vh` }}>
             <h2 className="sr-only">{t.menu.servicos}</h2>
             <ul className="sr-only">
-                {servicos.map(s => <li key={s.id}>{s.nome}: {s.texto}</li>)}
+                {itens.map(s => <li key={s.id}>{s.nome}: {s.texto}</li>)}
             </ul>
             <div ref={palco} className="sticky top-0 h-svh overflow-hidden">
                 <canvas ref={canvas} aria-hidden className="absolute left-0 top-0" />

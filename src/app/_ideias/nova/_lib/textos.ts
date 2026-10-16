@@ -28,6 +28,8 @@ export const TEXTOS = {
             { id: 'ux', nome: 'Experiência', texto: 'Pesquisa de UX, fluxos e protótipos para o produto fazer sentido para quem usa.' },
             { id: 'ui', nome: 'Interface', texto: 'UI com personalidade, desenhada para virar código sem perder nada.' },
         ] as { id: IdServico; nome: string; texto: string }[],
+        // o processo abre os pontos dos serviços: o jeito de trabalhar que passa por todos eles
+        processo: { nome: 'Processo', texto: 'Do protótipo ao produto final, em etapas curtas e entregas que dá para ver.' },
         laboratorio: {
             titulo: 'Laboratório',
             texto: 'Estudos e projetos próprios. O primeiro é a Foeger Sans, a fonte da logo: desenhada do zero e ainda em processo.',
@@ -55,6 +57,7 @@ export const TEXTOS = {
             { id: 'ux', nome: 'Experience', texto: 'UX research, flows and prototypes so the product makes sense to the people using it.' },
             { id: 'ui', nome: 'Interface', texto: 'UI with character, designed to become code without losing anything.' },
         ] as { id: IdServico; nome: string; texto: string }[],
+        processo: { nome: 'Process', texto: 'From prototype to final product, in short stages with deliveries you can see.' },
         laboratorio: {
             titulo: 'Laboratory',
             texto: 'Studies and personal projects. The first is Foeger Sans, the typeface behind the logo: drawn from scratch and still in progress.',
