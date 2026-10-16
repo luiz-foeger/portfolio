@@ -14,11 +14,20 @@ import { TIPO } from '../_lib/tipo';
 // celular) e a experiência (um rosto rindo, com brilhos em volta). Entre um estado e outro, os pontos voam em
 // bando, em curva, da esquerda para a direita. No desktop o voo fica preso à rolagem (linear e reversível) e os
 // pontos fogem do mouse; no toque, a rolagem só escolhe o estado e o voo anda sozinho. O texto aparece embaixo quando
-// a forma assenta
+// a forma assenta. A palavra fica parada por pouco tempo, e o desenho, mais
 type P = [number, number];
 type Estado = { id: 'processo' | IdServico; palavra: boolean; nome: string; texto: string };
 // depois do processo, os serviços na ordem de um projeto
 const ORDEM: IdServico[] = ['branding', 'ui', 'saas', 'ux'];
+// a rolagem de cada trecho, em vh: a palavra fica parada por pouco tempo, o desenho fica mais e o voo leva o resto. A
+// seção soma os trechos e mais uma tela, a que fica presa
+const PALAVRA = 8;
+const DESENHO = 26;
+const VOO = 30;
+// num trecho entre dois estados, o bando voa de 0,22 a 0,88 (com o atraso de cada ponto); antes e depois, a forma
+// fica parada
+const VOO_INICIO = 0.22;
+const VOO_FIM = 0.88;
 
 const TINTA = '#050505';
 
@@ -29,6 +38,34 @@ const sorteio = (i: number) => {
     const s = Math.sin(i * 127.1 + 311.7) * 43758.5453;
     return s - Math.floor(s);
 };
+
+// os nós da rolagem: quanto da seção (em vh) leva até cada ponto da linha dos estados, de 0 a E - 1. Cada estado fica
+// parado o tempo dele, e entre dois estados vai um voo
+function rolagem(estados: Estado[]) {
+    const E = estados.length;
+    const nos: P[] = [[0, 0]];
+    let total = 0;
+    estados.forEach((e, j) => {
+        total += e.palavra ? PALAVRA : DESENHO;
+        nos.push([total, j < E - 1 ? j + VOO_INICIO : j]);
+        if (j < E - 1) {
+            total += VOO;
+            nos.push([total, j + VOO_FIM]);
+        }
+    });
+    return { nos, total };
+}
+
+// a posição na linha dos estados para o progresso q (de 0 a 1) da seção
+function naLinha({ nos, total }: ReturnType<typeof rolagem>, q: number) {
+    const x = limitar(q) * total;
+    const i = nos.findIndex(([v]) => v >= x);
+    if (i < 0) return nos[nos.length - 1][1];
+    if (i === 0) return 0;
+    const [x0, s0] = nos[i - 1];
+    const [x1, s1] = nos[i];
+    return s0 + ((s1 - s0) * (x - x0)) / (x1 - x0);
+}
 
 // os desenhos, numa caixa centrada (u e v de 0 a 1)
 function desenhar(g: CanvasRenderingContext2D, estado: Estado, familia: string, W: number, H: number) {
@@ -196,6 +233,7 @@ export default function Pontilhado() {
     ];
     const estados: Estado[] = itens.flatMap(s => [{ ...s, palavra: true }, { ...s, palavra: false }]);
     const E = estados.length;
+    const tempos = rolagem(estados);
 
     useEffect(() => {
         const el = palco.current;
@@ -241,7 +279,7 @@ export default function Pontilhado() {
             cv.height = Math.round(H * dpr);
             cv.style.width = `${W}px`;
             cv.style.height = `${H}px`;
-            m.toque.para = Math.round(p.get() * (E - 1));
+            m.toque.para = Math.round(naLinha(tempos, p.get()));
             m.toque.inicio = -1e9;
         };
         const desenharQuadro = (agora: number) => {
@@ -254,7 +292,7 @@ export default function Pontilhado() {
             g.clearRect(0, 0, W, H);
             g.fillStyle = TINTA;
             g.beginPath();
-            const s = limitar(p.get()) * (E - 1);
+            const s = naLinha(tempos, p.get());
             const k = Math.min(E - 2, Math.floor(s));
             const f = s - k;
             const tt = (agora - m.toque.inicio) / 1000;
@@ -267,7 +305,7 @@ export default function Pontilhado() {
                 if (!toque) {
                     a = formas[k][i];
                     b = formas[k + 1][i];
-                    e = reduzido ? (f > 0.55 ? 1 : 0) : entraESai(trecho(f, 0.22 + atraso, 0.72 + atraso));
+                    e = reduzido ? (f > 0.55 ? 1 : 0) : entraESai(trecho(f, VOO_INICIO + atraso, VOO_INICIO + 0.5 + atraso));
                 } else {
                     a = [m.toque.origemX[i] ?? formas[m.toque.para][i][0], m.toque.origemY[i] ?? formas[m.toque.para][i][1]];
                     b = formas[m.toque.para][i];
@@ -300,9 +338,10 @@ export default function Pontilhado() {
                 g.arc(x, y, m.raio, 0, Math.PI * 2);
             }
             g.fill();
-            // o texto do estado mais perto, quando a forma assenta
+            // o texto do estado mais perto: inteiro enquanto a forma está parada, e some no começo do voo
             const perto = toque ? m.toque.para : Math.round(s);
-            const assentado = toque ? limitar((tt - 0.9) / 0.4) : 1 - limitar((Math.abs(s - perto) - 0.08) / 0.12);
+            const fora = Math.max(perto - (1 - VOO_FIM) - s, s - (perto + VOO_INICIO), 0);
+            const assentado = toque ? limitar((tt - 0.9) / 0.4) : 1 - limitar(fora / 0.1);
             const est = estados[perto];
             if (legenda.current && nomeDaLegenda.current && textoDaLegenda.current && est) {
                 legenda.current.style.opacity = assentado.toFixed(3);
@@ -318,7 +357,7 @@ export default function Pontilhado() {
         // no toque, a rolagem escolhe o estado e os pontos saem de onde estão
         const aoRolar = (v: number) => {
             if (!toque || !m.formas.length) return;
-            const alvo = Math.round(limitar(v) * (E - 1));
+            const alvo = Math.round(naLinha(tempos, v));
             if (alvo === m.toque.para) return;
             m.toque.origemX = m.px.slice();
             m.toque.origemY = m.py.slice();
@@ -348,7 +387,7 @@ export default function Pontilhado() {
     }, [idioma, toque, reduzido]);
 
     return (
-        <section id="servicos" ref={secao} className="relative" style={{ height: `${E * 55 + 100}vh` }}>
+        <section id="servicos" ref={secao} className="relative" style={{ height: `${tempos.total + 100}vh` }}>
             <h2 className="sr-only">{t.menu.servicos}</h2>
             <ul className="sr-only">
                 {itens.map(s => <li key={s.id}>{s.nome}: {s.texto}</li>)}
