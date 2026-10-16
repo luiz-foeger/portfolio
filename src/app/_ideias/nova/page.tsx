@@ -8,8 +8,9 @@
 // entrega (_components/Pontilhado.tsx), e o laboratório guarda os estudos próprios, começando pela Foeger Sans.
 // O manifesto continua no ato da escala (_components/Expansao.tsx): a palavra da escala fica no meio exato da tela,
 // troca e cresce com a rolagem e, no fim, a haste do "l" dela cobre a tela com o claro; daí a página segue no tema
-// claro (serviços e laboratório; o rodapé continua o de sempre). O cabeçalho (só a logo e o idioma, sem menu) fica em
-// modo diferença, para aparecer no claro e por cima das imagens.
+// claro (serviços e laboratório). No fecho, a chamada "Tem um projeto em mente?" fica presa enquanto a tinta escura
+// sobe do pé da tela em ondas (_components/FechoTinta.tsx) e emenda no rodapé de sempre. O cabeçalho (só a logo e o
+// idioma, sem menu) fica em modo diferença, para aparecer no claro e por cima das imagens.
 // Português por padrão, com inglês no cabeçalho (na primeira visita, segue o idioma do navegador).
 // As imagens do ato ficam em public/nova-escala.
 import { useEffect, useRef, useState } from 'react';
@@ -17,6 +18,7 @@ import ManifestoComum, { TAMANHO } from '../_comum/Manifesto';
 import Cabecalho from './_components/Cabecalho';
 import Pontilhado from './_components/Pontilhado';
 import Laboratorio from './_components/Laboratorio';
+import FechoTinta from './_components/FechoTinta';
 import { APAGA_FRASE, AtoContexto, ExpansaoJanelas, FUNDO_CLARO } from './_components/Expansao';
 import Footer from '../../../components/layout/Footer';
 import { useIdioma, useTexto } from './_lib/idioma';
@@ -104,6 +106,8 @@ export default function Nova() {
                 <Pontilhado />
                 <Laboratorio claro />
             </div>
+            {/* o fecho: a tinta sobe em ondas atrás da chamada e leva o claro para o escuro do rodapé */}
+            <FechoTinta />
             {/* o rodapé do site (o id fica como âncora do contato) */}
             <div id="contato">
                 <Footer />
