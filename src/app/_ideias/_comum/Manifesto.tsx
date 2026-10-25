@@ -298,8 +298,9 @@ const ESPACO_FIXO = String.fromCharCode(160);
 type PalavraDaLinha = { texto: string; indice: number };
 
 // semRastro: tela de toque, as palavras sobem sem o rastro vertical. fracao: a parte da rolagem que é das palavras (o
-// resto é da continuação). centro: a palavra que fica no meio exato da linha dela
-function PalavrasQueSobem({ linhas, progresso, reduzido, semRastro, pontos, fracao, centro }: {
+// resto é da continuação). centro: a palavra que fica no meio exato da linha dela. Exportado também para a chamada do
+// fecho da home, que se monta dos pontos do mesmo jeito
+export function PalavrasQueSobem({ linhas, progresso, reduzido, semRastro, pontos, fracao, centro }: {
     linhas: string[];
     progresso: MotionValue<number>;
     reduzido: boolean;
