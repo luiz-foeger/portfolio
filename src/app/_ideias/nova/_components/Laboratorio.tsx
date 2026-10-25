@@ -7,6 +7,7 @@ import { useBorrao } from '../../_comum/borrao';
 import { useIdioma, useTexto } from '../_lib/idioma';
 import { TIPO } from '../_lib/tipo';
 
+// fora da home desde 16/10/2026 (no lugar dele entraram os projetos e o fecho); guardado para continuar depois.
 // laboratório: estudos e projetos próprios no lugar dos trabalhos antigos. O título estreito e pesado atravessa a
 // tela com a rolagem (borrando na horizontal quando corre) e embaixo vem o primeiro estudo, a Foeger Sans,
 // escrita com a própria fonte. Ela ainda não tem pontuação além de ponto e vírgula, então a amostra só usa letras

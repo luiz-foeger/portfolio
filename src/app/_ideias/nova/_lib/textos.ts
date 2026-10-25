@@ -1,6 +1,7 @@
 // todo o texto da home nova, em português e inglês
 export type Idioma = 'pt' | 'en';
 export type IdServico = 'saas' | 'branding' | 'ux' | 'ui';
+export type IdProjeto = 'site' | 'tipografia' | 'turno' | 'aurora' | 'pulso';
 
 export const EMAIL = 'foegerluiz@gmail.com';
 export const LINKS = [
@@ -35,6 +36,18 @@ export const TEXTOS = {
             texto: 'Estudos e projetos próprios. O primeiro é a Foeger Sans, a fonte da logo: desenhada do zero e ainda em processo.',
             amostra: 'Föeger Sans',
         },
+        // este site e a tipografia são os trabalhos de verdade; Turno, Aurora e Pulso são conceitos (um por serviço) até
+        // entrarem os projetos novos
+        projetos: {
+            titulo: 'Projetos',
+            itens: [
+                { id: 'site', nome: 'Este site', texto: 'A marca Föeger, do manifesto ao código, com movimento em cada seção.' },
+                { id: 'tipografia', nome: 'Tipografia', texto: 'Uma fonte desenhada do zero, com livro de espécime e lugar para brincar.' },
+                { id: 'turno', nome: 'Turno', texto: 'Conceito: um SaaS de agendamento para salões e barbearias.' },
+                { id: 'aurora', nome: 'Aurora', texto: 'Conceito: a marca de uma padaria de fermentação natural.' },
+                { id: 'pulso', nome: 'Pulso', texto: 'Conceito: um app de treino que se ajusta à semana.' },
+            ] as { id: IdProjeto; nome: string; texto: string }[],
+        },
         contato: { chamada: 'Tem um projeto em mente?' },
         demos: {
             saas: { etapas: ['Ideia', 'Design', 'No ar'], titulo: 'Reservas', semana: 'esta semana', botao: 'Nova reserva', aviso: 'Nova reserva', agora: 'agora', aoVivo: 'ao vivo', dias: ['S', 'T', 'Q', 'Q', 'S', 'S', 'D'] },
@@ -62,6 +75,16 @@ export const TEXTOS = {
             titulo: 'Laboratory',
             texto: 'Studies and personal projects. The first is Foeger Sans, the typeface behind the logo: drawn from scratch and still in progress.',
             amostra: 'Föeger Sans',
+        },
+        projetos: {
+            titulo: 'Projects',
+            itens: [
+                { id: 'site', nome: 'This site', texto: 'The Föeger brand, from manifesto to code, with motion in every section.' },
+                { id: 'tipografia', nome: 'Typography', texto: 'A typeface drawn from scratch, with a specimen book and a place to play.' },
+                { id: 'turno', nome: 'Turno', texto: 'Concept: a booking SaaS for salons and barbershops.' },
+                { id: 'aurora', nome: 'Aurora', texto: 'Concept: the brand for a sourdough bakery.' },
+                { id: 'pulso', nome: 'Pulso', texto: 'Concept: a training app that adapts to your week.' },
+            ] as { id: IdProjeto; nome: string; texto: string }[],
         },
         contato: { chamada: 'Got a project in mind?' },
         demos: {
