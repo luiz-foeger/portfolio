@@ -910,6 +910,194 @@
     }
 }
 
+/* ---------- a seção depois do creme (_comp/Projetos.tsx), em teste ---------- */
+
+/* comum: a margem dos lados, o rótulo na serifa itálica dos cantos do hero, o nome em caixa alta na letra do hero e a
+   frase do problema e da solução */
+.fa-proj {
+    position: relative;
+    padding: 0 max(16px, 3.4vw);
+}
+
+.fa-proj-rotulo {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: max(15px, 1.25vw);
+    line-height: 1;
+    margin-bottom: max(28px, 3vw);
+}
+
+.fa-proj-nome {
+    font-weight: 600;
+    text-transform: uppercase;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+}
+
+.fa-proj-meta {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: max(15px, 1.15vw);
+    line-height: 1;
+}
+
+.fa-proj-frase {
+    font-size: max(14px, 0.95vw);
+    line-height: 1.35;
+    opacity: 0.75;
+}
+
+.fa-proj img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+/* lista */
+/* a lista sobe 12% da tela por cima do fim do hero (preso, já coberto pelo creme do ato), para começar logo que o
+   creme fecha a tela, e fica por cima dele (vem depois no DOM; sem z-index, para não isolar o modo diferença das
+   linhas do fundo). Ela não pinta fundo: o creme é a camada de fundo dela (_comp/Fundo.tsx),
+   que some no vão vazio do fim, depois da última linha */
+.fa-proj-lista {
+    margin-top: -12svh;
+    padding-top: 4svh;
+    padding-bottom: 45svh;
+}
+
+.fa-proj-lista ul {
+    border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.fa-proj-lista li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: max(14px, 1.3vw) 0;
+    border-bottom: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+
+/* com uma linha ativa, as outras apagam e desfocam como os itens do menu no hover; o efeito vai no conteúdo da linha
+   (a própria linha leva a entrada pelo desfoque, presa à rolagem) */
+.fa-proj-lista li > * {
+    transition:
+        opacity 1.2s var(--easeOutQuart),
+        filter 1.2s var(--easeOutQuart);
+}
+
+.fa-proj-com-aberta li:not(.fa-aberta) > * {
+    opacity: 0.2;
+    filter: blur(10px);
+}
+
+.fa-proj-lista .fa-proj-nome {
+    display: inline-flex;
+    align-items: center;
+    font-size: clamp(48px, 8.4vw, 168px);
+    white-space: nowrap;
+}
+
+.fa-proj-janela {
+    display: inline-block;
+    height: 0.7275em;
+    width: 0;
+    margin-left: 0;
+    overflow: hidden;
+    border-radius: 3px;
+    transition: width 0.8s var(--easeOutQuart), margin 0.8s var(--easeOutQuart);
+}
+
+.fa-proj-janela img {
+    height: 100%;
+    width: auto;
+    max-width: none;
+}
+
+/* a miniatura do computador, no vão entre os nomes e as descrições (Projetos.tsx); a janela ao lado do nome fica para
+   o celular */
+.fa-proj-caixa {
+    position: relative;
+}
+
+.fa-proj-miniatura {
+    position: absolute;
+    top: 0;
+    aspect-ratio: 16 / 9;
+    translate: 0 -50%;
+    overflow: hidden;
+    border-radius: 3px;
+    pointer-events: none;
+}
+
+.fa-proj-miniatura > div {
+    height: 100%;
+}
+
+.fa-proj-miniatura img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 767px) {
+    .fa-proj-miniatura {
+        display: none;
+    }
+
+    .fa-aberta .fa-proj-janela {
+        width: 1.293em;
+        margin-left: 0.18em;
+    }
+}
+
+.fa-proj-lado {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    text-align: right;
+    max-width: 300px;
+}
+
+@media (max-width: 767px) {
+    .fa-proj-lista li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .fa-proj-lado {
+        align-items: flex-start;
+        text-align: left;
+        max-width: none;
+    }
+}
+
+/* no computador as linhas ficam em modo diferença sobre a miniatura (que passa por trás delas): a cor #FAEBAC é a
+   diferença entre o creme e o navy, então no creme a letra sai no navy de sempre e, onde a miniatura cobre, a letra
+   inverte a imagem. No celular a janela fica dentro do nome, e lá a diferença inverteria a própria imagem */
+@media (min-width: 768px) {
+    .fa-proj-lista li {
+        position: relative;
+        color: #faebac;
+        mix-blend-mode: difference;
+    }
+}
+
+/* a lista apertada para o índice lateral (_fa/Indice.tsx), que fica à esquerda a partir dela: o recuo cobre o índice
+   (margem, números, traço e o nome mais longo, ~19 vezes a unidade dele) e um respiro; os nomes ficam um pouco menores
+   para o vão da miniatura não sumir. No celular o índice some e a lista volta às margens de sempre */
+@media (min-width: 768px) {
+    .fa-proj-lista {
+        padding-left: calc(21 * max(var(--fa-r), 10px));
+    }
+
+    .fa-proj-lista .fa-proj-nome {
+        font-size: clamp(48px, 7.4vw, 148px);
+    }
+}
+
 /* ---------- a camada "mar" do fundo (_comp/Fundo.tsx) ---------- */
 
 /* o navy da abertura com a luz das ondas: manchas turquesa e azul, borradas, que se mexem devagar, para a passagem do
