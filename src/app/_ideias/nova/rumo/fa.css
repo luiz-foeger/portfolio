@@ -1546,3 +1546,50 @@
     }
 }
 
+/* o barquinho de papel nas ondas do rodapé (_comp/Barquinho.tsx): a tela pequena do barco (anda com ele), as telas das
+   gotas (a janela, uma atrás e outra na frente dele) e a área de pegar, transparente; por cima do rodapé e por baixo
+   das bordas de vidro (90) e do cabeçalho */
+.fa-barco-tela {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 60;
+    pointer-events: none;
+    visibility: hidden;
+    will-change: transform;
+}
+
+.fa-barco-gotas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 61;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+/* as gotas que estão mais longe que o barco passam por trás dele */
+.fa-barco-gotas-atras {
+    z-index: 59;
+}
+
+.fa-barco {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 62;
+    pointer-events: none;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* com a raiz na frente, para vencer a seta comum do rumo.css */
+[data-rumo][data-pronto] .fa-barco {
+    cursor: grab;
+}
+
+[data-rumo][data-pronto] .fa-barco[data-segurando] {
+    cursor: grabbing;
+}
