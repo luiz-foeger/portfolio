@@ -745,6 +745,95 @@
     }
 }
 
+/* ---------- índice lateral ---------- */
+
+/* o índice lateral, na unidade --ix: a --fa-r com mínimo de 10 px, para a letra não passar de 12 px
+   para baixo (na escala de 1440 ela teria 9 px). Escondido nas telas pequenas, onde cairia em cima do texto */
+.fa-indice-trilho {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+    mix-blend-mode: difference;
+}
+
+.fa-indice {
+    --ix: max(var(--fa-r), 10px);
+    position: sticky;
+    top: 0;
+    height: calc(20.6 * var(--ix) + 50svh);
+    padding-bottom: calc(20.6 * var(--ix));
+    color: var(--cream);
+}
+
+/* a primeira linha fica no meio da tela; as outras descem abaixo dela (sem corte) e sobem com a posição */
+.fa-indice-conteudo {
+    position: absolute;
+    left: var(--padding-x);
+    top: calc(50svh - 0.7 * var(--ix));
+    display: flex;
+    align-items: flex-start;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: calc(1.2 * var(--ix));
+    line-height: calc(1.4 * var(--ix));
+}
+
+.fa-indice-numeros {
+    display: flex;
+    flex-direction: column;
+    gap: calc(1.0333 * var(--ix));
+    pointer-events: auto;
+}
+
+.fa-indice-numeros > button,
+.fa-indice-nomes > span {
+    display: block;
+    height: calc(1.4 * var(--ix));
+    transition: transform 0.4s var(--easeOutQuart);
+}
+
+.fa-indice-traco {
+    width: calc(2 * var(--ix));
+    height: max(1px, calc(0.1 * var(--ix)));
+    margin: calc(0.65 * var(--ix)) calc(1.2 * var(--ix)) 0 calc(1.4 * var(--ix));
+    background: currentColor;
+}
+
+.fa-indice-janela {
+    height: calc(1.4 * var(--ix));
+    overflow: hidden;
+}
+
+.fa-indice-nomes {
+    display: flex;
+    flex-direction: column;
+    gap: calc(1.0333 * var(--ix));
+    white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+    .fa-indice-trilho {
+        display: none;
+    }
+}
+
+/* o cabeçalho em modo diferença o tempo todo, como o índice lateral: ele acompanha o que passa atrás, inclusive as
+   imagens e o creme do ato da escala, que ficam por cima do fundo de cores (antes ele só ligava quando esse fundo
+   ficava claro). Os dois em branco: na diferença, o branco sobre o navy dá um creme (#FAEDC9) mais perto do creme do
+   texto do que o próprio creme daria (#FAEBAC, amarelado), e sobre o creme dá quase o navy. Os itens do menu aberto
+   (também em diferença) seguem a mesma cor */
+.fa-cab {
+    mix-blend-mode: difference;
+    color: #fff;
+}
+
+.fa-indice,
+.fa-menu-lista {
+    color: #fff;
+}
+
 /* o hero que também é o manifesto: a seção é alta (o ato da escala vem ao rolar) e o texto fica preso no meio da tela,
    num palco do tamanho dela */
 #hero {
