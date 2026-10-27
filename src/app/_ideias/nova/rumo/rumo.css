@@ -1,0 +1,23 @@
+/* sem a Bricolage (pedido de 23/10): a página inteira, rodapé incluído, na sans simples das peças (Inter Tight); a
+   serifa itálica dos rótulos e a fonte da logo (um desenho em SVG) continuam */
+[data-rumo] {
+    --ff-fa-sans: var(--ff-grotesca);
+    --ff-fa-serif: var(--ff-serifa);
+    font-family: var(--ff-grotesca), 'Helvetica Neue', Arial, sans-serif;
+}
+[data-rumo] .font-bricolage {
+    font-family: var(--ff-grotesca), 'Helvetica Neue', Arial, sans-serif !important;
+    font-variation-settings: normal !important;
+}
+
+/* sem o cursor de texto (o "I") sobre as letras: a seta comum em tudo e a mãozinha no que é clicável; a seleção de
+   texto continua funcionando */
+[data-rumo][data-pronto],
+[data-rumo][data-pronto] * {
+    cursor: default;
+}
+
+[data-rumo][data-pronto] :is(a, button, [role='button'], label, summary),
+[data-rumo][data-pronto] :is(a, button, [role='button'], label, summary) * {
+    cursor: pointer;
+}

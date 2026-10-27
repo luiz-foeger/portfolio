@@ -1,0 +1,99 @@
+/* as peças que a página do rumo usa (carregamento, cabeçalho, menu, hero, faixa de desfoque, barra de progresso,
+   indicador e o fundo da bolha), todas medidas numa unidade própria, a variável --fa-r, e não no rem */
+[data-fa] {
+    /* uma unidade de largura/192 como variável, só nestas peças: o html segue com o rem normal */
+    --fa-r: max(0.5208333333vw, 1px);
+    --cream: #fffde2;
+    --navy: #051236;
+    --apagada: rgba(255, 253, 226, 0.3);
+    --secundaria: rgba(255, 253, 226, 0.6);
+    --easeOutQuart: cubic-bezier(0.165, 0.84, 0.44, 1);
+    --easeOutCubic: cubic-bezier(0.33, 1, 0.68, 1);
+    --p3out: cubic-bezier(0.25, 1, 0.5, 1);
+    --gap-x: calc(2.4 * var(--fa-r));
+    --padding-x: calc(4.8 * var(--fa-r));
+    --sans: var(--ff-fa-sans), 'Helvetica Neue', Arial, sans-serif;
+    --serif: var(--ff-fa-serif), Georgia, serif;
+    position: relative;
+    color: var(--cream);
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: calc(1.8 * var(--fa-r));
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: wait;
+    /* as fotos da diagonal do processo saem da tela pela direita (clip não cria rolagem, e o sticky continua) */
+    overflow-x: clip;
+}
+
+[data-fa][data-pronto] {
+    cursor: auto;
+}
+
+[data-fa] ::selection {
+    background: var(--cream);
+    color: var(--navy);
+}
+
+/* os resets ficam em :where (especificidade zero), para não vencerem as classes dos componentes */
+:where([data-fa]) a {
+    color: inherit;
+    text-decoration: none;
+}
+
+:where([data-fa]) button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+:where([data-fa]) :is(ul, ol) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+:where([data-fa]) :is(h1, h2, h3, h4, p) {
+    margin: 0;
+    font-weight: inherit;
+}
+
+/* palavras soltas, cada uma na sua caixa, para os efeitos por palavra */
+.fa-w {
+    display: inline-block;
+    will-change: opacity, filter;
+}
+
+.fa-serif {
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+}
+
+/* a linha numa máscara que corta o que passa dela: sobe de 105% */
+.fa-mascara {
+    display: block;
+    overflow: clip;
+    padding-bottom: 0.1em;
+    margin-bottom: -0.1em;
+}
+
+.fa-mascara > .fa-linha {
+    display: block;
+    transform: translateY(105%);
+    will-change: transform;
+}
+
+.fa-grade {
+    display: grid;
+    grid-template-columns: repeat(14, minmax(0, 1fr));
+    column-gap: var(--gap-x);
+    padding: 0 var(--padding-x);
+}
+
+
+
