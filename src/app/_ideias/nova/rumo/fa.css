@@ -1346,3 +1346,203 @@
     pointer-events: none;
 }
 
+/* ---------- o rodapé (_comp/Rodape.tsx), com as medidas na unidade do rumo (--fa-r) e mínimos para as telas
+   menores; as ondas ficam no fundo (_comp/Fundo.tsx) ---------- */
+#footer {
+    position: relative;
+    min-height: max(100svh, calc(115 * var(--fa-r)));
+    padding: calc(29.8 * var(--fa-r)) 0 0;
+    color: var(--cream);
+    overflow: hidden;
+}
+
+.fa-ro-grade {
+    position: relative;
+    min-height: calc(max(100svh, calc(115 * var(--fa-r))) - calc(29.8 * var(--fa-r)));
+    align-content: start;
+}
+
+.fa-ro-slogan {
+    grid-column: 1 / span 7;
+    font-size: calc(12 * var(--fa-r));
+    line-height: 85%;
+    font-weight: 600;
+    letter-spacing: calc(-0.36 * var(--fa-r));
+}
+
+.fa-ro-slogan > span {
+    display: block;
+}
+
+.fa-ro-slogan > .fa-ro-troca {
+    display: grid;
+}
+
+.fa-ro-troca > span {
+    grid-area: 1 / 1;
+    padding: 0.2em;
+    margin: -0.2em;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: normal;
+    transform: translateZ(0);
+    isolation: isolate;
+}
+
+.fa-ro-troca > span + span {
+    opacity: 0;
+    filter: blur(10px);
+}
+
+/* do lado direito, na altura do slogan (27/10): o contato com o mesmo peso dele, alinhado à direita; em cima o rótulo,
+   o e-mail grande e o começo de projeto, embaixo as redes, que fecham na linha de baixo do slogan */
+.fa-ro-lado {
+    grid-column: 9 / -1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: max(28px, calc(4 * var(--fa-r)));
+    padding-top: calc(1.4 * var(--fa-r));
+    text-align: right;
+}
+
+.fa-ro-contato {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.fa-ro-rotulo {
+    display: block;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: max(13px, calc(1.6 * var(--fa-r)));
+    line-height: 0.9em;
+    color: var(--secundaria);
+    margin-bottom: max(2px, calc(0.4 * var(--fa-r)));
+}
+
+.fa-ro-email {
+    font-size: max(24px, calc(4.6 * var(--fa-r)));
+    line-height: 1.4em;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    clip-path: inset(0.3em 0 0);
+}
+
+.fa-ro-comecar {
+    margin-top: max(10px, calc(1.6 * var(--fa-r)));
+    font-size: max(15px, calc(2.2 * var(--fa-r)));
+    line-height: 1.4em;
+    letter-spacing: -0.02em;
+}
+
+.fa-ro-redes {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: max(20px, calc(3.4 * var(--fa-r)));
+    line-height: 1.12;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+}
+
+/* os direitos no pé, acima da faixa de vidro do pé (_comp/Bordas.tsx, 64 px), para o texto pequeno não passar pela
+   lente */
+.fa-ro-base {
+    position: absolute;
+    left: var(--padding-x);
+    right: var(--padding-x);
+    bottom: calc(64px + calc(2.4 * var(--fa-r)));
+}
+
+.fa-ro-direitos {
+    font-size: max(13px, calc(1.8 * var(--fa-r)));
+    line-height: 1.4em;
+    letter-spacing: -0.02em;
+}
+
+/* os sublinhados do rodapé: o que entra da esquerda e sai pela direita (o começo de projeto e as redes) e, no e-mail,
+   o que some para a direita e volta da esquerda */
+.fa-sublinha2 {
+    position: relative;
+    display: inline-block;
+}
+
+.fa-sublinha2::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s var(--easeOutQuart);
+}
+
+#footer a:hover .fa-sublinha2::after,
+#footer a:hover.fa-sublinha2::after {
+    transform-origin: left;
+    transform: scaleX(1);
+}
+
+#footer a:hover .fa-sublinha::after,
+#footer a:hover.fa-sublinha::after {
+    animation:
+        fa-sub-a 0.3s var(--easeOutQuart) forwards,
+        fa-sub-b 0.3s var(--easeOutQuart) 0.3s forwards;
+}
+
+/* no celular o rodapé empilha: o slogan na largura da tela, o contato e as redes embaixo dele (à esquerda, as redes numa
+   linha) e os direitos */
+@media (max-width: 767px) {
+    #footer {
+        padding-top: 22svh;
+    }
+
+    .fa-ro-grade {
+        display: block;
+        padding: 0 20px calc(64px + 24px);
+        min-height: calc(100svh - 22svh);
+    }
+
+    .fa-ro-slogan {
+        font-size: 15vw;
+        letter-spacing: -0.03em;
+    }
+
+    .fa-ro-lado {
+        align-items: flex-start;
+        gap: 26px;
+        margin-top: 8svh;
+        padding-top: 0;
+        text-align: left;
+    }
+
+    .fa-ro-contato {
+        align-items: flex-start;
+    }
+
+    .fa-ro-email {
+        font-size: 26px;
+    }
+
+    .fa-ro-redes {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 4px 18px;
+        font-size: 19px;
+    }
+
+    .fa-ro-base {
+        position: static;
+        margin-top: 6svh;
+    }
+}
+
