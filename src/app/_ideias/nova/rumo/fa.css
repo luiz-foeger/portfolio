@@ -104,6 +104,29 @@
     pointer-events: none;
 }
 
+.fa-camada {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    will-change: opacity;
+    transform: translateZ(0);
+}
+
+.fa-camada > canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.fa-grao {
+    position: absolute;
+    inset: 0;
+    background-size: 100px 100px;
+    background-repeat: repeat;
+}
+
 .fa-desfoque {
     position: fixed;
     top: -5px;
@@ -587,6 +610,76 @@
     /* as peças do ato que ficam só nas telas grandes (NO_CELULAR em _comp/Escala.tsx) */
     .fa-so-grande {
         display: none !important;
+    }
+}
+
+/* ---------- a camada "mar" do fundo (_comp/Fundo.tsx) ---------- */
+
+/* o navy da abertura com a luz das ondas: manchas turquesa e azul, borradas, que se mexem devagar, para a passagem do
+   creme parecer mudança de luz */
+.fa-mar {
+    background: #051236;
+}
+
+.fa-mar-luz {
+    position: absolute;
+    width: 62vw;
+    height: 62vw;
+    right: -16vw;
+    bottom: -34vw;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(33, 146, 150, 0.75), rgba(20, 71, 121, 0.45) 48%, rgba(20, 71, 121, 0) 100%);
+    filter: blur(40px);
+    will-change: transform;
+    animation: fa-mar-a 11s ease-in-out infinite alternate;
+}
+
+.fa-mar-luz-2 {
+    width: 44vw;
+    height: 44vw;
+    left: -16vw;
+    right: auto;
+    top: -20vw;
+    bottom: auto;
+    background: radial-gradient(closest-side, rgba(20, 71, 121, 0.7), rgba(20, 71, 121, 0) 100%);
+    animation: fa-mar-b 13s ease-in-out infinite alternate;
+}
+
+.fa-mar-luz-3 {
+    width: 16vw;
+    height: 16vw;
+    left: 30vw;
+    right: auto;
+    bottom: 6vh;
+    background: radial-gradient(closest-side, rgba(78, 201, 172, 0.45), rgba(78, 201, 172, 0) 100%);
+    filter: blur(24px);
+    animation: fa-mar-c 9s ease-in-out infinite alternate;
+}
+
+@keyframes fa-mar-a {
+    from {
+        transform: translate(0, 0) scale(1);
+    }
+    to {
+        transform: translate(-6vw, -5vh) scale(1.12);
+    }
+}
+
+@keyframes fa-mar-b {
+    from {
+        transform: translate(0, 0) scale(1.05);
+    }
+    to {
+        transform: translate(5vw, 4vh) scale(0.92);
+    }
+}
+
+@keyframes fa-mar-c {
+    from {
+        transform: translate(0, 0);
+    }
+    to {
+        transform: translate(8vw, -6vh);
     }
 }
 
