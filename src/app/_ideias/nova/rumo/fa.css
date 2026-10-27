@@ -463,6 +463,134 @@
     filter: blur(10px);
 }
 
+/* ---------- hero ---------- */
+
+#hero {
+    position: relative;
+    height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fa-hero {
+    position: relative;
+    width: calc(129.6 * var(--fa-r));
+}
+
+.fa-hero h1 {
+    font-size: calc(11 * var(--fa-r));
+    line-height: 0.9em;
+    font-weight: 600;
+    letter-spacing: calc(-0.33 * var(--fa-r));
+    text-transform: uppercase;
+}
+
+.fa-hero-linha {
+    display: block;
+    white-space: nowrap;
+}
+
+.fa-hero-linha:nth-child(1) {
+    padding-left: calc(25.9 * var(--fa-r));
+}
+
+.fa-hero-linha:nth-child(2) {
+    padding-left: calc(33.3 * var(--fa-r));
+}
+
+.fa-hero-linha:nth-child(3) {
+    padding-left: calc(26.7 * var(--fa-r));
+}
+
+.fa-hero-linha:nth-child(4) {
+    padding-left: calc(42.9 * var(--fa-r));
+}
+
+.fa-hero-traco {
+    transform: translateY(-0.1em);
+}
+
+.fa-hero-troca {
+    display: inline-grid;
+    width: calc(43.7 * var(--fa-r));
+    white-space: nowrap;
+}
+
+.fa-hero-troca > span {
+    grid-area: 1 / 1;
+}
+
+.fa-hero-troca > span + span {
+    opacity: 0;
+    filter: blur(10px);
+}
+
+/* a janela tem a altura das maiúsculas (0,7275 em na Inter Tight) e se apoia na linha de base, então começa e termina
+   junto com as letras da linha; a proporção é de 22,7 × 7,9. Cada capa tem o seu enquadramento (Hero.tsx),
+   para a marca de cada projeto aparecer no mesmo tamanho e no meio */
+.fa-hero-janela {
+    position: relative;
+    display: inline-block;
+    height: 0.7275em;
+    aspect-ratio: 22.7 / 7.9;
+    margin: 0 0.15em;
+    vertical-align: baseline;
+    overflow: hidden;
+    clip-path: inset(0 100% 0 0);
+    background: #000;
+}
+
+.fa-hero-janela img {
+    position: absolute;
+    max-width: none;
+    opacity: 0;
+}
+
+.fa-hero-idiomas {
+    position: absolute;
+    top: calc(1.3 * var(--fa-r));
+    right: calc(13.8 * var(--fa-r));
+    display: flex;
+    align-items: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: max(13px, calc(1.9 * var(--fa-r)));
+    line-height: 0.9em;
+}
+
+.fa-hero-idiomas .fa-mascara {
+    padding: 0 calc(0.6 * var(--fa-r)) 0.1em;
+}
+
+.fa-hero-idiomas .fa-mascara:first-child {
+    padding-left: 0;
+}
+
+.fa-hero-sep {
+    width: calc(0.1 * var(--fa-r));
+    height: calc(1.4 * var(--fa-r));
+    background: var(--cream);
+    opacity: 0;
+}
+
+.fa-hero-desde {
+    position: absolute;
+    left: calc(13.2 * var(--fa-r));
+    bottom: calc(1 * var(--fa-r));
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: max(13px, calc(1.9 * var(--fa-r)));
+    line-height: 0.9em;
+}
+
+.fa-hero .fa-w {
+    opacity: 0;
+    filter: blur(10px);
+}
+
 /* ---------- ajustes da tela de teste (23/10) ---------- */
 
 /* "Menu" e PT/EN no mesmo tamanho (entre os dois de antes) e legíveis em tela pequena; a logo também tem um mínimo */
@@ -575,6 +703,86 @@
 /* os itens do menu com um mínimo para as telas pequenas (na escala do desktop eles ficavam com ~32 px no celular) */
 .fa-menu-lista {
     font-size: max(54px, calc(16 * var(--fa-r)));
+}
+
+/* o hero nas telas pequenas, com a mesma escada: a escala das peças (--fa-r) cresce até a escada caber
+   na largura da tela. A escada vai do recuo de 25,9rem até ~122rem ("ESCALAM — COM"), ou seja ~96rem de texto; o teto de 4 px é o rem a 768 px, para não dar salto. A escala vale para a seção inteira, para as
+   palavras soltas do ato da escala, que ficam fora do bloco do texto, saírem do mesmo tamanho. Abaixo de 768 px o bloco perde a margem
+   vazia da esquerda (os recuos ficam relativos ao da primeira linha) e se ajusta ao texto */
+#hero {
+    --fa-r: max(0.5208333333vw, min(calc((100vw - 2 * max(20px, 2.5vw)) / 97), 4px));
+}
+
+/* no celular a letra vem antes da margem: 14 px dos lados e a segunda linha mais perto da primeira (a mais larga,
+   ~93rem com o recuo), para a escada crescer o quanto couber */
+@media (max-width: 767px) {
+    #hero {
+        --fa-r: calc((100vw - 28px) / 93);
+    }
+
+    .fa-hero {
+        width: auto;
+    }
+
+    .fa-hero-linha:nth-child(1) {
+        padding-left: 0;
+    }
+
+    .fa-hero-linha:nth-child(2) {
+        padding-left: calc(3.5 * var(--fa-r));
+    }
+
+    .fa-hero-linha:nth-child(3) {
+        padding-left: calc(0.8 * var(--fa-r));
+    }
+
+    .fa-hero-linha:nth-child(4) {
+        padding-left: calc(17 * var(--fa-r));
+    }
+
+    .fa-hero-troca {
+        width: auto;
+    }
+}
+
+/* o hero que também é o manifesto: a seção é alta (o ato da escala vem ao rolar) e o texto fica preso no meio da tela,
+   num palco do tamanho dela */
+#hero {
+    display: block;
+}
+
+.fa-hero-palco {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* os cantos do hero nas telas pequenas: em vez de presos ao bloco (caem em cima da escada), o de cima vai acima dela e
+   o de baixo abaixo, alinhados à esquerda, com letra mínima de 13 px */
+@media (max-width: 767px) {
+    #hero .fa-hero-idiomas,
+    #hero .fa-hero-desde {
+        position: static;
+        font-size: max(13px, calc(1.6 * var(--fa-r)));
+    }
+
+    #hero .fa-hero {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #hero .fa-hero-idiomas {
+        order: -1;
+        justify-content: flex-start;
+        margin-bottom: 1.6em;
+    }
+
+    #hero .fa-hero-desde {
+        margin-top: 1.8em;
+    }
 }
 
 /* o carregamento nas telas pequenas: as medidas dele vêm do rem do computador (largura/192, ~2 px num celular), e o
