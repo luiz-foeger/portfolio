@@ -97,3 +97,496 @@
 
 
 
+.fa-fundo {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.fa-desfoque {
+    position: fixed;
+    top: -5px;
+    left: 0;
+    width: 100%;
+    height: 30vh;
+    z-index: 99;
+    pointer-events: none;
+    /* 6 px (eram 10) desde as bordas de vidro (_comp/Bordas.tsx), para a lente do alto aparecer através dela */
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    -webkit-mask-image: linear-gradient(0deg, transparent, #000);
+    mask-image: linear-gradient(0deg, transparent, #000);
+}
+
+.fa-cab {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: start;
+    padding: calc(4.8 * var(--fa-r)) var(--padding-x);
+    font-size: calc(1.4 * var(--fa-r));
+    line-height: 1;
+    color: var(--cream);
+    pointer-events: none;
+}
+
+.fa-cab.fa-dif {
+    mix-blend-mode: difference;
+}
+
+.fa-cab > * {
+    pointer-events: auto;
+}
+
+.fa-cab-menu {
+    justify-self: start;
+    margin-top: calc(0.5 * var(--fa-r));
+    display: flex;
+    align-items: center;
+    gap: calc(1.2 * var(--fa-r));
+    letter-spacing: -0.042em;
+    /* o rótulo empilha "Menu" e "Fechar" na largura do maior; centrado (o padrão do botão), o "Menu" saía mais para
+       dentro em português, onde o "Fechar" é mais largo */
+    text-align: left;
+}
+
+.fa-hamburguer {
+    position: relative;
+    width: calc(1.6 * var(--fa-r));
+    height: calc(1.4 * var(--fa-r));
+}
+
+.fa-hamburguer > span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: calc(0.1 * var(--fa-r));
+    overflow: clip;
+    transition: transform 0.6s var(--easeOutQuart);
+}
+
+.fa-hamburguer > span:first-child {
+    top: calc(50% - calc(0.35 * var(--fa-r)));
+}
+
+.fa-hamburguer > span:last-child {
+    top: calc(50% + calc(0.25 * var(--fa-r)));
+}
+
+.fa-hamburguer > span > i {
+    display: block;
+    height: 100%;
+    background: currentColor;
+}
+
+[data-menu] .fa-hamburguer > span:first-child {
+    transform: translateY(calc(0.3 * var(--fa-r))) rotate(45deg);
+}
+
+[data-menu] .fa-hamburguer > span:last-child {
+    transform: translateY(calc(-0.3 * var(--fa-r))) rotate(-45deg);
+}
+
+.fa-cab-logo {
+    justify-self: center;
+    display: block;
+    height: calc(2.7933 * var(--fa-r));
+}
+
+.fa-cab-logo svg {
+    display: block;
+    height: 100%;
+    width: auto;
+    overflow: visible;
+}
+
+.fa-cab-chat {
+    justify-self: end;
+    margin-top: calc(0.5 * var(--fa-r));
+    display: flex;
+    align-items: center;
+    gap: calc(0.8 * var(--fa-r));
+    letter-spacing: calc(-0.042 * var(--fa-r));
+}
+
+/* o texto que rola no hover: o texto sobe e a cópia entra por baixo (a externa é a troca Menu ↔ Fechar) */
+.fa-rola,
+.fa-rola-externa {
+    position: relative;
+    display: inline-block;
+    overflow: clip;
+    vertical-align: top;
+}
+
+.fa-rola > span,
+.fa-rola-externa > span {
+    display: block;
+}
+
+.fa-rola > span + span,
+.fa-rola-externa > span + span {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translateY(100%);
+}
+
+.fa-seta {
+    position: relative;
+    display: flex;
+    gap: calc(0.6 * var(--fa-r));
+    width: calc(1.2 * var(--fa-r));
+    height: calc(1.2 * var(--fa-r));
+    overflow: clip;
+}
+
+.fa-seta svg {
+    flex: none;
+    width: calc(1.2 * var(--fa-r));
+    height: calc(1.2 * var(--fa-r));
+    transform: translateX(calc((-100% - calc(0.6 * var(--fa-r))) * (1 - var(--progress, 1))));
+}
+
+/* a barra de progresso na borda esquerda */
+.fa-progresso {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(0.2 * var(--fa-r));
+    height: 100svh;
+    z-index: 80;
+    mix-blend-mode: difference;
+    pointer-events: none;
+}
+
+.fa-progresso > i {
+    display: block;
+    height: 100%;
+    background: var(--cream);
+    transform-origin: top;
+    transform: scaleY(var(--progress, 0));
+    transition: transform 0.1s linear;
+}
+
+/* o indicador de rolagem: ponto e traço com o brilho que corre */
+.fa-ind {
+    position: fixed;
+    left: 50%;
+    bottom: calc(4.8 * var(--fa-r));
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(1.2 * var(--fa-r));
+    z-index: 18;
+    pointer-events: none;
+    mix-blend-mode: difference;
+}
+
+.fa-ind-ponto {
+    width: calc(0.7 * var(--fa-r));
+    height: calc(0.7 * var(--fa-r));
+    border-radius: 50%;
+    border: calc(0.1 * var(--fa-r)) solid #fff;
+    transform: scale(0);
+}
+
+.fa-ind-ponto.fa-pronto {
+    transition: transform 0.4s var(--easeOutQuart);
+}
+
+.fa-ind.fa-ativo .fa-ind-ponto {
+    transform: scale(0) !important;
+}
+
+.fa-ind-traco {
+    position: relative;
+    width: calc(0.1 * var(--fa-r));
+    height: calc(calc(8 * var(--fa-r)) - calc(8 * var(--fa-r)) * var(--progress, 0));
+    overflow: hidden;
+    transform: scaleY(0);
+    transform-origin: center top;
+}
+
+.fa-ind-traco::before,
+.fa-ind-traco::after {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 200%;
+    background: linear-gradient(rgba(255, 255, 255, 0), #fff 50%, rgba(255, 255, 255, 0));
+    animation: fa-brilho 3s linear infinite;
+}
+
+.fa-ind-traco::after {
+    animation-delay: -1.5s;
+}
+
+@keyframes fa-brilho {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(100%);
+    }
+}
+
+.fa-carregando {
+    position: fixed;
+    inset: 0;
+    z-index: 10000000;
+    background: var(--cream);
+    color: var(--navy);
+    cursor: wait;
+}
+
+.fa-carregando-ola {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(3.2 * var(--fa-r));
+    letter-spacing: calc(-0.096 * var(--fa-r));
+    line-height: 1;
+}
+
+.fa-carregando-conteudo {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+}
+
+.fa-carregando-marca {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc(22.2 * var(--fa-r));
+    height: calc(22.2 * var(--fa-r));
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fa-carregando-marca svg {
+    width: 62%;
+    height: auto;
+    overflow: visible;
+}
+
+.fa-carregando-pct {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(31.3 * var(--fa-r));
+    text-align: center;
+    font-size: calc(1.4 * var(--fa-r));
+    line-height: 1;
+}
+
+.fa-carregando-linha {
+    position: absolute;
+    left: 50%;
+    bottom: calc(26.6 * var(--fa-r));
+    width: calc(24 * var(--fa-r));
+    height: 1px;
+    margin-left: calc(-12 * var(--fa-r));
+    background: rgba(5, 18, 54, 0.15);
+}
+
+.fa-carregando-linha > i {
+    position: absolute;
+    inset: 0;
+    background: var(--navy);
+    transform-origin: left center;
+    transform: scaleX(0);
+}
+
+/* ---------- menu ---------- */
+
+.fa-menu {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    background: var(--navy);
+    clip-path: inset(0 0 100% 0);
+    visibility: hidden;
+}
+
+.fa-menu-lista {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: calc(16 * var(--fa-r));
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    mix-blend-mode: difference;
+}
+
+.fa-menu-lista button {
+    opacity: 0;
+    filter: blur(10px);
+}
+
+/* ---------- ajustes da tela de teste (23/10) ---------- */
+
+/* "Menu" e PT/EN no mesmo tamanho (entre os dois de antes) e legíveis em tela pequena; a logo também tem um mínimo */
+.fa-cab {
+    --logo-h: max(18px, calc(2.7933 * var(--fa-r)));
+    font-size: max(13px, 0.88vw);
+    padding: max(18px, calc(4.8 * var(--fa-r))) max(18px, var(--padding-x));
+}
+
+.fa-cab-logo {
+    height: var(--logo-h);
+}
+
+.fa-hamburguer {
+    width: max(14px, calc(1.6 * var(--fa-r)));
+    height: max(12px, calc(1.4 * var(--fa-r)));
+}
+
+/* as duas linhas do hambúrguer com afastamento mínimo (no celular elas se sobrepunham) */
+.fa-hamburguer > span {
+    height: max(1px, calc(0.1 * var(--fa-r)));
+}
+
+.fa-hamburguer > span:first-child {
+    top: calc(50% - max(3px, calc(0.35 * var(--fa-r))));
+}
+
+.fa-hamburguer > span:last-child {
+    top: calc(50% + max(2px, calc(0.25 * var(--fa-r))));
+}
+
+[data-menu] .fa-hamburguer > span:first-child {
+    transform: translateY(max(2.5px, calc(0.3 * var(--fa-r)))) rotate(45deg);
+}
+
+[data-menu] .fa-hamburguer > span:last-child {
+    transform: translateY(min(-2.5px, calc(-0.3 * var(--fa-r)))) rotate(-45deg);
+}
+
+/* "Menu" ↔ "Fechar" na mesma célula: a caixa fica do tamanho da palavra maior (o "Fechar" saía cortado) */
+.fa-rola-externa {
+    display: inline-grid;
+}
+
+.fa-rola-externa > span {
+    grid-area: 1 / 1;
+}
+
+.fa-rola-externa > span + span {
+    position: relative;
+}
+
+/* o sublinhado dos links no hover: some para a direita e volta da esquerda */
+.fa-sublinha {
+    position: relative;
+    display: inline-block;
+}
+
+.fa-sublinha::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: max(1px, calc(0.1 * var(--fa-r)));
+    background: currentColor;
+    transform-origin: right;
+}
+
+@keyframes fa-sub-a {
+    from {
+        transform-origin: right;
+        transform: scaleX(1);
+    }
+    to {
+        transform-origin: right;
+        transform: scaleX(0);
+    }
+}
+
+@keyframes fa-sub-b {
+    from {
+        transform-origin: left;
+        transform: scaleX(0);
+    }
+    to {
+        transform-origin: left;
+        transform: scaleX(1);
+    }
+}
+
+/* o hover do menu: os outros itens apagam e desfocam em 1,2 s, e o sublinhado do item corre */
+.fa-menu-lista button {
+    transition:
+        opacity 1.2s var(--easeOutQuart),
+        filter 1.2s var(--easeOutQuart);
+}
+
+.fa-menu-lista:has(button:hover) button:not(:hover) {
+    opacity: 0.2 !important;
+    filter: blur(10px) !important;
+}
+
+.fa-menu-lista button:hover .fa-sublinha::after {
+    animation:
+        fa-sub-a 0.3s var(--easeOutQuart) forwards,
+        fa-sub-b 0.3s var(--easeOutQuart) 0.3s forwards;
+}
+
+/* os itens do menu com um mínimo para as telas pequenas (na escala do desktop eles ficavam com ~32 px no celular) */
+.fa-menu-lista {
+    font-size: max(54px, calc(16 * var(--fa-r)));
+}
+
+/* o carregamento nas telas pequenas: as medidas dele vêm do rem do computador (largura/192, ~2 px num celular), e o
+   "Olá", a logo e a porcentagem ficavam miúdos. Abaixo de 768 px o texto tem mínimo de 20 px e margem dos lados, a
+   logo ocupa perto de metade da largura, e a porcentagem e a linha ficam logo abaixo dela (no computador elas ficam
+   presas ao pé da tela) */
+@media (max-width: 767px) {
+    .fa-carregando-ola {
+        padding: 0 24px;
+        text-align: center;
+        font-size: max(20px, 5.6vw);
+        letter-spacing: -0.03em;
+    }
+
+    .fa-carregando-marca {
+        width: min(46vw, 220px);
+        height: min(46vw, 220px);
+    }
+
+    .fa-carregando-pct {
+        top: calc(50% + min(23vw, 110px) + 18px);
+        bottom: auto;
+        font-size: 13px;
+    }
+
+    .fa-carregando-linha {
+        top: calc(50% + min(23vw, 110px) + 44px);
+        bottom: auto;
+        width: 40vw;
+        margin-left: -20vw;
+    }
+
+    /* as peças do ato que ficam só nas telas grandes (NO_CELULAR em _comp/Escala.tsx) */
+    .fa-so-grande {
+        display: none !important;
+    }
+}
+
