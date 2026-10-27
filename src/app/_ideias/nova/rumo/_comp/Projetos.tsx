@@ -4,9 +4,9 @@
 // textos de _lib/textos.ts. Os nomes grandes em caixa alta, um por linha, com o problema e a solução ao lado; no hover
 // (no celular, a linha do meio da tela) a janela do hero abre ao lado do nome com um exemplo, e as outras linhas apagam.
 // As linhas entram pelo desfoque do hero, presas à posição delas na tela. A seção sobe por cima do fim do hero, para
-// começar logo que o creme cobre a tela (em fa.css). Em teste, duas versões do exemplo, trocadas no seletor "Lista" do
-// canto (?lista=): as capas falsas (public/nova-escala/falsas) ou os conceitos. As versões de projetos em pilha, trilho
-// e um por tela estão em C:/pessoal/ideias/rumo-visual/secao-projetos
+// começar logo que o creme cobre a tela (em fa.css). O exemplo de cada linha é um conceito (escolhido em 27/10; a
+// versão com as capas falsas está em C:/pessoal/ideias/rumo-visual/lista-capas-falsas). As versões de projetos em
+// pilha, trilho e um por tela estão em C:/pessoal/ideias/rumo-visual/secao-projetos
 import { useEffect, useRef, useState } from 'react';
 import { aCadaQuadro } from '../_fa/laco';
 import { useIdioma } from '../../_lib/idioma';
@@ -16,74 +16,13 @@ import { CAPA_DO_PROJETO } from '../../_lib/midia';
 
 const CREME = '#FFFDE2';
 const NAVY = '#051236';
-// os exemplos de cada linha (marcas, sites, produtos, lançamentos): uma capa falsa ou um conceito, com o nome dele
-const EXEMPLOS = {
-    falsas: [1, 2, 3, 4].map(i => ({
-        capa: `/nova-escala/falsas/capa-${i}.jpg`,
-        nome: '',
-    })),
-    conceitos: [
-        { capa: CAPA_DO_PROJETO.aurora, nome: 'Aurora' },
-        { capa: CAPA_DO_PROJETO.site, nome: 'Föeger' },
-        { capa: CAPA_DO_PROJETO.turno, nome: 'Turno' },
-        { capa: CAPA_DO_PROJETO.pulso, nome: 'Pulso' },
-    ],
-};
-
-const OPCOES = [
-    { id: 'falsas', nome: '1 · Capas falsas' },
-    { id: 'conceitos', nome: '3 · Conceitos' },
-] as const;
-export type VersaoDaLista = (typeof OPCOES)[number]['id'];
-const CHAVE = 'foeger-rumo-lista';
-const valida = (v: string | null): v is VersaoDaLista => OPCOES.some(o => o.id === v);
-
-export function useVersaoDaLista() {
-    const [versao, setVersao] = useState<VersaoDaLista>('conceitos');
-    useEffect(() => {
-        let salva: string | null = null;
-        try {
-            salva = localStorage.getItem(CHAVE);
-        } catch {}
-        const doEndereco = new URLSearchParams(location.search).get('lista');
-        const v = valida(doEndereco) ? doEndereco : valida(salva) ? salva : null;
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- a escolha só existe no navegador
-        if (v) setVersao(v);
-    }, []);
-    const escolher = (v: VersaoDaLista) => {
-        setVersao(v);
-        try {
-            localStorage.setItem(CHAVE, v);
-        } catch {}
-        const url = new URL(location.href);
-        url.searchParams.set('lista', v);
-        history.replaceState(history.state, '', url);
-    };
-    return [versao, escolher] as const;
-}
-
-export function SeletorDaLista({ versao, escolher }: { versao: VersaoDaLista; escolher: (v: VersaoDaLista) => void }) {
-    return (
-        <div className="fixed bottom-4 left-4 z-[95] flex items-center gap-1 rounded-full bg-black/55 px-2 py-1 text-[12px] text-white backdrop-blur">
-            <span style={{ padding: '4px 6px', opacity: 0.6 }}>Lista</span>
-            {OPCOES.map(o => (
-                // a escolhida em pílula branca, por estilo próprio (o fa.css zera o fundo e o espaço dos botões da página)
-                <button
-                    key={o.id}
-                    type="button"
-                    onClick={() => escolher(o.id)}
-                    className="rounded-full"
-                    style={{
-                        padding: '4px 10px',
-                        ...(versao === o.id ? { background: '#fff', color: '#000' } : { opacity: 0.75 }),
-                    }}
-                >
-                    {o.nome}
-                </button>
-            ))}
-        </div>
-    );
-}
+// os exemplos de cada linha (marcas, sites, produtos, lançamentos): um conceito, com o nome dele
+const EXEMPLOS = [
+    { capa: CAPA_DO_PROJETO.aurora, nome: 'Aurora' },
+    { capa: CAPA_DO_PROJETO.site, nome: 'Föeger' },
+    { capa: CAPA_DO_PROJETO.turno, nome: 'Turno' },
+    { capa: CAPA_DO_PROJETO.pulso, nome: 'Pulso' },
+];
 
 const limitar = (v: number) => Math.min(1, Math.max(0, v));
 const suave = (x: number) => x * x * (3 - 2 * x);
@@ -120,7 +59,7 @@ const SAIDA = 'cubic-bezier(.165,.84,.44,1)';
 const ENTRE = 'cubic-bezier(.77,0,.175,1)';
 const ponteiro = { x: -1, y: -1 };
 
-export default function Projetos({ versao }: { versao: VersaoDaLista }) {
+export default function Projetos() {
     const T = textosDoRumo(useIdioma().idioma).projetos;
     const raiz = useRef<HTMLElement>(null);
     const lista = useRef<HTMLDivElement>(null);
@@ -207,13 +146,13 @@ export default function Projetos({ versao }: { versao: VersaoDaLista }) {
                     >
                         {T.itens.map((item, i) => (
                             // eslint-disable-next-line @next/next/no-img-element
-                            <img key={item.nome} src={EXEMPLOS[versao][i].capa} alt="" />
+                            <img key={item.nome} src={EXEMPLOS[i].capa} alt="" />
                         ))}
                     </div>
                 </div>
                 <ul className={ativa >= 0 ? 'fa-proj-com-aberta' : ''}>
                     {T.itens.map((item, i) => {
-                        const ex = EXEMPLOS[versao][i];
+                        const ex = EXEMPLOS[i];
                         return (
                             <li key={item.nome} data-linha data-entra className={ativa === i ? 'fa-aberta' : ''}>
                                 <span className="fa-proj-nome">
@@ -224,11 +163,9 @@ export default function Projetos({ versao }: { versao: VersaoDaLista }) {
                                     </span>
                                 </span>
                                 <span className="fa-proj-lado">
-                                    {ex.nome && (
-                                        <span className="fa-proj-meta">
-                                            {T.exemplo} {ex.nome}, {T.conceito}
-                                        </span>
-                                    )}
+                                    <span className="fa-proj-meta">
+                                        {T.exemplo} {ex.nome}, {T.conceito}
+                                    </span>
                                     <span className="fa-proj-frase">
                                         {item.problema} → {item.solucao}
                                     </span>

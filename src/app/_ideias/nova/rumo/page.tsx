@@ -17,7 +17,7 @@ import Cursor from './_comp/Cursor';
 import Bordas from './_comp/Bordas';
 import Barquinho from './_comp/Barquinho';
 import GraoVivo from './_comp/GraoVivo';
-import Projetos, { SeletorDaLista, useVersaoDaLista } from './_comp/Projetos';
+import Projetos from './_comp/Projetos';
 import Rodape from './_comp/Rodape';
 import Indice from './_fa/Indice';
 import Imagens from './_comp/Imagens';
@@ -29,7 +29,6 @@ import { idiomaVisto } from './_lib/troca';
 export default function Rumo() {
     const { idioma } = useIdioma();
     const cores = COR_DA_ABERTURA;
-    const [lista, escolherLista] = useVersaoDaLista();
     // o idioma que a página já mostrou, atualizado depois dos filhos (_lib/troca.ts)
     useEffect(() => {
         idiomaVisto.atual = idioma;
@@ -49,7 +48,7 @@ export default function Rumo() {
                 <div data-fundo={cores.fundo} data-tinta={cores.tinta}>
                     <Hero key={idioma} />
                 </div>
-                <Projetos key={`projetos-${idioma}`} versao={lista} />
+                <Projetos key={`projetos-${idioma}`} />
                 <Imagens key={`imagens-${idioma}`} />
                 <Indice key={`indice-${idioma}`} />
             </div>
@@ -60,7 +59,6 @@ export default function Rumo() {
             <Bordas />
             <Cursor />
             <GraoVivo />
-            <SeletorDaLista versao={lista} escolher={escolherLista} />
         </Casca>
     );
 }
