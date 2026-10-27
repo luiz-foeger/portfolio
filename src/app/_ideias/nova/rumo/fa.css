@@ -1335,3 +1335,14 @@
     object-fit: cover;
 }
 
+/* as bordas de vidro (_comp/Bordas.tsx): as duas faixas fixas no alto e no pé, por cima da página e por baixo do
+   cabeçalho e do cursor (z-index 100) */
+.fa-borda {
+    position: fixed;
+    /* 2 px além dos lados: o deslocamento sideways do mapa (o vermelho em 128, não 127,5) lia o vazio na última coluna */
+    left: -2px;
+    right: -2px;
+    z-index: 90;
+    pointer-events: none;
+}
+
