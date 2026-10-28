@@ -7,7 +7,7 @@
 // shader. As capas têm todas o mesmo tamanho e a proporção delas (16:10), alinhadas (ele não gosta de capas de tamanhos
 // diferentes); a do meio ocupa ~44% da altura da tela, para a água ter espaço.
 // No hover (no celular, a capa que passa no meio), a capa chega um pouco mais perto e as outras apagam e desfocam como os
-// itens do menu; embaixo, a legenda dela sai do desfoque em modo diferença (o nome em caixa alta, o tipo e o ano na
+// itens do menu; embaixo, a legenda dela sai do desfoque na tinta da seção (o nome em caixa alta, o tipo e o ano na
 // serifa itálica e uma linha), e o cursor vira "Ver projeto". O mouse acha a capa pelo raio que sai da câmera e bate no
 // cilindro em que cada capa está desenhada (a do hover, mais perto, num raio menor).
 // A água: o mouse sobre a capa levanta uma onda líquida (a simulação está em _lib/agua-gl.ts), que continua
@@ -718,7 +718,7 @@ export default function Imagens() {
                 <div ref={grupo} className="fa-galeria-grupo" style={{ opacity: 0 }} aria-hidden>
                     <canvas ref={tela} className="fa-curva-tela" />
                 </div>
-                {/* a legenda da capa ativa, em modo diferença (fora da troca de idioma pelo desfoque: ela já entra e sai pelo
+                {/* a legenda da capa ativa, na tinta da seção (fora da troca de idioma pelo desfoque: ela já entra e sai pelo
                     desfoque, e a troca deixava as treze visíveis ao mesmo tempo) */}
                 <div className="fa-curva-legendas" aria-live="polite">
                     {T.itens.map((it, i) => (

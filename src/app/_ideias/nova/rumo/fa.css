@@ -1154,71 +1154,96 @@
 
 /* ---------- a camada "mar" do fundo (_comp/Fundo.tsx) ---------- */
 
-/* o navy da abertura com a luz das ondas: manchas turquesa e azul, borradas, que se mexem devagar, para a passagem do
-   creme parecer mudança de luz */
+/* o navy da abertura, debaixo d'água (a menta clara foi testada em 27/10 e ficou clara demais: ele prefere a sensação
+   de estar dentro d'água). A luz vem da superfície, como os feixes do ato (_comp/FundoOndas.tsx): um brilho no alto e
+   feixes em leque que descem dele, bem borrados e discretos durante a faixa, apagando para o fundo e balançando devagar
+   (28/10; antes eram manchas redondas que flutuavam soltas pela tela). Com o "Veja mais" (--clara, de 0 a 1, escrita
+   por Fundo.tsx) a cena clareia pela luz, não pela cor: o fundo continua escuro, os feixes ganham força e se abrem, o
+   brilho da superfície cresce e uma poça de luz aparece atrás das palavras, como a câmera chegando perto da superfície
+   antes de o rodapé voltar à tona. (Um azul-ardósia pastel, #394A5B, foi testado no lugar: ficou apagado demais) */
 .fa-mar {
+    --clara: 0;
     background: #051236;
 }
 
-.fa-mar-luz {
+/* a poça de luz atrás do "Veja mais", e um pouco de luz descendo do alto pela tela toda */
+.fa-mar-clara {
     position: absolute;
-    width: 62vw;
-    height: 62vw;
-    right: -16vw;
-    bottom: -34vw;
-    border-radius: 50%;
-    background: radial-gradient(closest-side, rgba(33, 146, 150, 0.75), rgba(20, 71, 121, 0.45) 48%, rgba(20, 71, 121, 0) 100%);
-    filter: blur(40px);
+    inset: 0;
+    opacity: var(--clara);
+    background:
+        radial-gradient(ellipse 46% 38% at 50% 44%, rgba(120, 214, 190, 0.2), rgba(33, 146, 150, 0.1) 55%, rgba(33, 146, 150, 0) 100%),
+        linear-gradient(to bottom, rgba(20, 71, 121, 0.55), rgba(20, 71, 121, 0.12) 60%, rgba(20, 71, 121, 0));
+}
+
+/* o brilho da superfície, no alto */
+.fa-mar-superficie {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 38% at 50% -6%, rgba(78, 201, 172, 0.3), rgba(33, 146, 150, 0.12) 55%, rgba(33, 146, 150, 0) 100%);
+    opacity: calc(0.45 + 0.55 * var(--clara));
+}
+
+/* os feixes: um leque de raios de larguras e forças diferentes que nascem de um ponto acima da tela, borrados e
+   apagando para baixo. A segunda camada é o mesmo leque espelhado, balançando em outro tempo: o cruzamento das duas
+   tremula como luz na água. Durante a faixa ficam bem apagados e mais borrados (quase só uma sugestão de luz); com o
+   "Veja mais" ficam mais fortes e nítidos e o leque se abre um pouco (scale, que soma com o balanço da animação) */
+.fa-mar-feixes {
+    position: absolute;
+    inset: -10% -25% 0;
+    background: conic-gradient(
+        from 0deg at 50% -35%,
+        transparent 0 151deg,
+        rgba(120, 214, 190, 0.2) 153deg,
+        transparent 156deg,
+        rgba(120, 214, 190, 0.1) 159deg,
+        transparent 161deg,
+        rgba(120, 214, 190, 0.22) 165deg,
+        transparent 169deg,
+        rgba(120, 214, 190, 0.08) 172deg,
+        transparent 173.5deg,
+        rgba(120, 214, 190, 0.24) 177deg,
+        transparent 181deg,
+        rgba(120, 214, 190, 0.12) 185deg,
+        transparent 187deg,
+        rgba(120, 214, 190, 0.2) 191deg,
+        transparent 195deg,
+        rgba(120, 214, 190, 0.09) 198deg,
+        transparent 200deg,
+        rgba(120, 214, 190, 0.16) 204deg,
+        transparent 208deg
+    );
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.55) 40%, transparent 82%);
+    mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.55) 40%, transparent 82%);
+    filter: blur(calc(26px - 10px * var(--clara)));
+    mix-blend-mode: screen;
+    opacity: calc(0.38 + 0.62 * var(--clara));
+    scale: calc(1 + 0.18 * var(--clara)) 1;
+    transform-origin: 50% -30%;
     will-change: transform;
-    animation: fa-mar-a 11s ease-in-out infinite alternate;
+    animation: fa-feixes-a 16s ease-in-out infinite alternate;
 }
 
-.fa-mar-luz-2 {
-    width: 44vw;
-    height: 44vw;
-    left: -16vw;
-    right: auto;
-    top: -20vw;
-    bottom: auto;
-    background: radial-gradient(closest-side, rgba(20, 71, 121, 0.7), rgba(20, 71, 121, 0) 100%);
-    animation: fa-mar-b 13s ease-in-out infinite alternate;
+.fa-mar-feixes-2 {
+    opacity: calc(0.2 + 0.5 * var(--clara));
+    animation: fa-feixes-b 23s ease-in-out infinite alternate;
 }
 
-.fa-mar-luz-3 {
-    width: 16vw;
-    height: 16vw;
-    left: 30vw;
-    right: auto;
-    bottom: 6vh;
-    background: radial-gradient(closest-side, rgba(78, 201, 172, 0.45), rgba(78, 201, 172, 0) 100%);
-    filter: blur(24px);
-    animation: fa-mar-c 9s ease-in-out infinite alternate;
-}
-
-@keyframes fa-mar-a {
+@keyframes fa-feixes-a {
     from {
-        transform: translate(0, 0) scale(1);
+        transform: rotate(-2.5deg);
     }
     to {
-        transform: translate(-6vw, -5vh) scale(1.12);
+        transform: rotate(3deg);
     }
 }
 
-@keyframes fa-mar-b {
+@keyframes fa-feixes-b {
     from {
-        transform: translate(0, 0) scale(1.05);
+        transform: scaleX(-1) rotate(3deg) translateX(3%);
     }
     to {
-        transform: translate(5vw, 4vh) scale(0.92);
-    }
-}
-
-@keyframes fa-mar-c {
-    from {
-        transform: translate(0, 0);
-    }
-    to {
-        transform: translate(8vw, -6vh);
+        transform: scaleX(-1) rotate(-2deg) translateX(-2%);
     }
 }
 
@@ -1258,7 +1283,8 @@
     cursor: grabbing;
 }
 
-/* a legenda da capa ativa, embaixo e no meio, em modo diferença: todas empilhadas no mesmo lugar, e a ativa sai do
+/* a legenda da capa ativa, embaixo e no meio, na tinta da seção (até 27/10 era branca em modo diferença, que não
+   escurecia sobre a camada do fundo e sumiria num fundo claro): todas empilhadas no mesmo lugar, e a ativa sai do
    desfoque como a palavra que troca no hero (as outras saem mais depressa) */
 .fa-curva-legendas {
     position: absolute;
@@ -1267,8 +1293,7 @@
     bottom: 7svh;
     display: grid;
     justify-items: center;
-    color: #fff;
-    mix-blend-mode: difference;
+    color: var(--tinta);
     pointer-events: none;
     text-align: center;
 }
@@ -1323,7 +1348,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--cream);
+    color: var(--tinta);
 }
 
 .fa-curva-mais-link {

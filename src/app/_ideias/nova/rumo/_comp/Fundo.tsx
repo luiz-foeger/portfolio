@@ -8,7 +8,9 @@
 // para baixo:
 // - as ondas do hero (_comp/FundoOndas.tsx, uma camada à parte, por cima desta), até o creme do ato cobrir a tela;
 // - creme: o fundo da lista dos serviços (a cor do creme do ato, para não haver emenda); some no vão do fim dela;
-// - mar: o navy com a luz turquesa das ondas se mexendo devagar, atrás da seção de imagens; some no fim dela;
+// - mar: o navy debaixo d'água, com o brilho da superfície e os feixes de luz descendo dela, atrás da seção de
+//   imagens; some no fim dela. Quando "Veja mais" entra, ele clareia pela luz (28/10): os feixes ganham força e se abrem
+//   e uma poça de luz aparece atrás das palavras;
 // - rodapé: as ondas do hero numa cena própria, "voltar à tona" (a cenaDoRodape de _comp/FundoOndas.tsx): reveladas
 //   quando o mar some, enquanto o rodapé entra, com a câmera subindo de debaixo d'água até acima da superfície, e
 //   com a água simulada do barquinho de papel (_comp/Barquinho.tsx).
@@ -65,6 +67,13 @@ export default function Fundo() {
                 mar: s.galeria.h ? 1 - ramp(y, fimImagens - 0.9 * vh, fimImagens - 0.2 * vh) : 0,
                 rodape: 1,
             };
+            // a clareada do mar atrás do "Veja mais": acompanha a entrada dele, o avanço da faixa de 0,84 a 0,98 (a conta é
+            // a de _comp/Imagens.tsx, em que ele entra de 0,86 a 0,96), e fica até o mar sumir
+            if (camadas.mar && s.galeria.h) {
+                const preso = Math.min(1, Math.max(0, (y - s.galeria.top) / Math.max(1, s.galeria.h - vh)));
+                const avanco = (preso - Math.min(1, Math.max(0, (s.galeria.top - y) / vh)) * 0.12 + 0.12) / 1.12;
+                camadas.mar.style.setProperty('--clara', suave(ramp(avanco, 0.84, 0.98)).toFixed(3));
+            }
             // de cima para baixo: uma camada só aparece se as de cima deixam passar alguma coisa (a luz das escondidas
             // para)
             let passa = 1;
@@ -100,9 +109,10 @@ export default function Fundo() {
                 <Ondas cena={cenaDoRodape} agua={aguaDoRodape} />
             </div>
             <div data-camada="mar" className="fa-camada fa-mar">
-                <div className="fa-mar-luz" />
-                <div className="fa-mar-luz fa-mar-luz-2" />
-                <div className="fa-mar-luz fa-mar-luz-3" />
+                <div className="fa-mar-clara" />
+                <div className="fa-mar-superficie" />
+                <div className="fa-mar-feixes" />
+                <div className="fa-mar-feixes fa-mar-feixes-2" />
             </div>
             <div data-camada="creme" className="fa-camada" style={{ background: '#fffde2' }} />
         </div>
