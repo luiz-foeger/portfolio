@@ -17,7 +17,7 @@
 import { useEffect, useRef } from 'react';
 import { aCadaQuadro, geo, type Quadro } from '../_fa/laco';
 import { ramp } from '../_fa/movimento';
-import { COR_DA_ABERTURA } from '../_lib/rumo';
+import { COR_DA_ABERTURA, luzDoAto } from '../_lib/rumo';
 
 // a rolagem do hero, em alturas de tela (o texto sai até 0,4, o SEGURA do Hero.tsx, e o ato vem depois): o mergulho vai
 // de MERGULHO[0] a MERGULHO[1] e a subida (no segredo, rolagem negativa) vai até SUBIDA. COBRE é onde o creme fecha a
@@ -66,6 +66,8 @@ precision highp float;
 uniform vec2 uRes;
 uniform float uT;
 uniform float uMerg;
+// o quanto o azul de debaixo d'água já clareou no ato (0 a 1; só na cena do hero)
+uniform float uClareia;
 uniform float uAgita;
 uniform float uDesf;
 uniform float uLarg;
@@ -82,8 +84,10 @@ const vec3 R0 = vec3(0.0784, 0.2784, 0.4745);
 const vec3 R1 = vec3(0.1294, 0.5725, 0.5882);
 const vec3 R2 = vec3(0.3059, 0.7882, 0.6745);
 const vec3 R3 = vec3(0.7098, 0.8706, 0.7216);
-// debaixo d'água o mesmo navy, mais claro (#0D2259)
+// debaixo d'água o mesmo navy, mais claro (#0D2259), que no ato clareia um passo a cada verbo até AGUA_CLARA (70% do
+// caminho até o azul da rampa, R0)
 const vec3 AGUA = vec3(0.051, 0.1333, 0.349);
+const vec3 AGUA_CLARA = vec3(0.0702, 0.2349, 0.4368);
 const float Z[7] = float[7](${ONDAS.z.map(glsl).join(', ')});
 const float ALTURA = ${glsl(ONDAS.altura)};
 // o horizonte em repouso fica abaixo do meio, para as ondas de trás não passarem atrás da escada; no mergulho ele volta
@@ -102,7 +106,7 @@ float agua(vec2 xz) {
 // a rampa da bolha até o turquesa claro (o núcleo verde-claro ficou de fora, para ser discreto), com o contorno escuro
 // mais leve
 vec3 pintar(float f, float sombra, float agua) {
-    vec3 c = mix(FUNDO, AGUA, agua);
+    vec3 c = mix(FUNDO, mix(AGUA, AGUA_CLARA, uClareia), agua);
     c *= 1.0 - 0.15 * smoothstep(0.02, 0.1, f) * (1.0 - smoothstep(0.1, 0.24, f));
     c = mix(c, R0, 0.3 * sombra * (1.0 - smoothstep(0.08, 0.25, f)));
     c = mix(c, R0, smoothstep(0.1, 0.3, f));
@@ -310,7 +314,7 @@ export function Ondas({ cena = cenaDoHero, agua }: { cena?: CenaDasOndas; agua?:
         if (!c || !gl) return;
         const prog = compilar(gl);
         const u = Object.fromEntries(
-            ['uRes', 'uT', 'uMerg', 'uAgita', 'uDesf', 'uLarg', 'uMouse', 'uAgua', 'uAguaLiga', 'uAguaGrade', 'uAguaN', 'uAguaCelula', 'uAguaPlano'].map(n => [
+            ['uRes', 'uT', 'uMerg', 'uClareia', 'uAgita', 'uDesf', 'uLarg', 'uMouse', 'uAgua', 'uAguaLiga', 'uAguaGrade', 'uAguaN', 'uAguaCelula', 'uAguaPlano'].map(n => [
                 n,
                 gl.getUniformLocation(prog, n),
             ]),
@@ -358,6 +362,7 @@ export function Ondas({ cena = cenaDoHero, agua }: { cena?: CenaDasOndas; agua?:
             gl.uniform2f(u.uRes, w, h);
             gl.uniform1f(u.uT, tempo);
             gl.uniform1f(u.uMerg, quadro.merg);
+            gl.uniform1f(u.uClareia, cena === cenaDoHero ? luzDoAto.clareia : 0);
             gl.uniform1f(u.uAgita, agita);
             gl.uniform1f(u.uDesf, quadro.desf);
             const larg = Math.max(0.35, cabe);
