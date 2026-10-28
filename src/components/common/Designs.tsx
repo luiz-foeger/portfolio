@@ -100,6 +100,7 @@ const DesignProjects: React.FC = () => {
                             className="group relative cursor-pointer overflow-hidden rounded-2xl bg-neutral-900 border border-white/5 break-inside-avoid shadow-lg"
                             whileHover={{ scale: 1.02 }} // Leve zoom no hover
                         >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={project.imageUrl}
                                 alt={project.title}

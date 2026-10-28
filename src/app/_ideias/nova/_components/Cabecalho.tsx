@@ -21,6 +21,7 @@ export default function Cabecalho() {
     useEffect(() => {
         const medir = () => setTela({ h: window.innerHeight, movel: window.innerWidth < 768 });
         medir();
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- a medida da tela só existe no navegador
         setPronto(true);
         window.addEventListener('resize', medir);
         return () => window.removeEventListener('resize', medir);

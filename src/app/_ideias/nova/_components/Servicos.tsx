@@ -33,10 +33,13 @@ export default function Servicos({ claro = false }: { claro?: boolean }) {
     return w < 768 ? <ServicosEmLista claro={claro} /> : <ServicosComPalco claro={claro} />;
 }
 
+// onde começa cada nome no vetor das letras (as letras de todos os nomes ficam num vetor só, em sequência)
+const inicioDosNomes = (servicos: { nome: string }[]) => servicos.map((_, i) => servicos.slice(0, i).reduce((a, x) => a + x.nome.length, 0));
+
 // letra fina que engrossa: perto do mouse no desktop; no celular, a palavra que passa pelo meio da tela
-function useLetrasQueEngrossam(letras: React.RefObject<(HTMLSpanElement | null)[]>, deps: unknown[]) {
+function useLetrasQueEngrossam(letrasRef: React.RefObject<(HTMLSpanElement | null)[]>, deps: unknown[]) {
     useEffect(() => {
-        const lista = letras.current;
+        const lista = letrasRef.current;
         const fino = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
         let px = -9999;
         let py = -9999;
@@ -128,7 +131,7 @@ function ServicosComPalco({ claro }: { claro: boolean }) {
     };
 
     const s = t.servicos[ativo];
-    let indice = 0;
+    const inicios = inicioDosNomes(t.servicos);
     return (
         <section id="servicos" ref={secao} className="relative" style={{ height: `${n * 90 + 100}vh` }}>
             <div className="sticky top-0 grid h-svh grid-cols-12 items-center gap-x-[3vw] px-[4vw] pb-[5vh] pt-[88px]">
@@ -137,8 +140,7 @@ function ServicosComPalco({ claro }: { claro: boolean }) {
                         {t.servicos.reduce((a, x) => (x.nome.length > a.length ? x.nome : a), '')}
                     </span>
                     {t.servicos.map((x, i) => {
-                        const inicio = indice;
-                        indice += x.nome.length;
+                        const inicio = inicios[i];
                         return (
                             <button
                                 key={x.id}
@@ -201,7 +203,7 @@ function ServicosEmLista({ claro }: { claro: boolean }) {
         return () => window.removeEventListener('resize', ajustar);
     }, [idioma]);
 
-    let indice = 0;
+    const inicios = inicioDosNomes(t.servicos);
     return (
         <section id="servicos" className="relative px-[4vw] pb-[14vh] pt-[16vh]">
             {filtro}
@@ -211,9 +213,8 @@ function ServicosEmLista({ claro }: { claro: boolean }) {
                 </span>
             </div>
             <div ref={alvo} className="flex flex-col gap-[12vh]">
-                {t.servicos.map(x => {
-                    const inicio = indice;
-                    indice += x.nome.length;
+                {t.servicos.map((x, i) => {
+                    const inicio = inicios[i];
                     return (
                         <ServicoNaLista key={x.id} id={x.id} texto={x.texto} claro={claro}>
                             <h3 className="whitespace-nowrap" style={{ ...TIPO.fina, fontSize: tamanho ? `${tamanho}px` : '20vw' }}>

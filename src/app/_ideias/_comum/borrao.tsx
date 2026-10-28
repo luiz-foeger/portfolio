@@ -14,7 +14,10 @@ export function useBorrao<T extends HTMLElement>(eixo: 'v' | 'h', { lerVelocidad
     const desfoque = useRef<SVGFEGaussianBlurElement>(null);
     const reduzido = useReducedMotion() ?? false;
     const ler = useRef(lerVelocidade);
-    ler.current = lerVelocidade;
+    // a fonte mais recente da velocidade, guardada depois de cada renderização (o laço só lê no quadro seguinte)
+    useEffect(() => {
+        ler.current = lerVelocidade;
+    });
 
     useEffect(() => {
         const el = alvo.current;

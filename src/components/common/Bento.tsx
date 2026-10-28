@@ -61,6 +61,7 @@ const Bento: React.FC = () => {
               </div>
 
               <div className="w-full rounded-xl bg-[#0d1117] border border-white/10 overflow-hidden p-2 shadow-inner">
+                 {/* eslint-disable-next-line @next/next/no-img-element */}
                  <img 
                    src="https://github-readme-activity-graph.vercel.app/graph?username=luiz-foeger&bg_color=0d1117&color=22d3ee&line=22d3ee&point=ffffff&area=true&hide_border=true" 
                    alt="GitHub Activity Graph"

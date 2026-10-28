@@ -128,6 +128,7 @@ const Card = ({
                     {/* LADO DIREITO */}
                     <div className="w-full md:w-[55%] flex-1 md:h-full min-h-[200px] rounded-2xl overflow-hidden relative border border-white/10 z-10 order-1 md:order-2 bg-[#111] pt-10 pl-6 pr-6  shadow-xl">
                         <motion.div style={{ scale: imageScale }} className="w-full h-full relative">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={src}
                                 alt={`Imagem do projeto ${title}`}

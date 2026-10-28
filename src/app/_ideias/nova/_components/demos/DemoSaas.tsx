@@ -70,7 +70,12 @@ export default function DemoSaas({ ativo }: { ativo: boolean }) {
         const id = setInterval(chegar, 1500);
         return () => { clearTimeout(primeiro); clearInterval(id); };
     }, [noAr, ativo]);
-    useEffect(() => { if (!noAr) setReservas(INICIAL); }, [noAr]);
+    // fora do ar, as reservas voltam ao começo (ajustado na renderização em que noAr muda)
+    const [noArAntes, setNoArAntes] = useState(noAr);
+    if (noAr !== noArAntes) {
+        setNoArAntes(noAr);
+        if (!noAr) setReservas(INICIAL);
+    }
 
     const rabiscos = useMemo(() => {
         const { x, base, alto, largura } = GRAFICO;

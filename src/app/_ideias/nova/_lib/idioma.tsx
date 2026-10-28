@@ -18,6 +18,7 @@ export function IdiomaProvider({ children }: { children: React.ReactNode }) {
             const salvo = localStorage.getItem(CHAVE);
             if (salvo === 'pt' || salvo === 'en') escolhido = salvo;
         } catch { }
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- o idioma salvo e o do navegador só existem no navegador
         setIdioma(escolhido);
         setPronto(true);
     }, []);

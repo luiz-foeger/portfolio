@@ -40,7 +40,12 @@ export default function Livro() {
     const escala = pw / FOLHA.w;
 
     // ao mudar de modo (largura da tela), volta ao começo
-    useEffect(() => { setVirada(0); setGiro(null); }, [duplo]);
+    const [duploAntes, setDuploAntes] = useState(duplo);
+    if (duplo !== duploAntes) {
+        setDuploAntes(duplo);
+        setVirada(0);
+        setGiro(null);
+    }
 
     // fechado na capa, o livro fica centrado; aberto, a lombada vai para o meio (na primeira vez, sem animar).
     // jump para de verdade uma animação em curso (set não para, e ela ganharia depois)
@@ -78,10 +83,12 @@ export default function Livro() {
     // ir direto a uma página (sumário): pula sem animar folha por folha. Logo depois de um arrasto, o clique que o
     // navegador ainda manda para o link é ignorado
     const ultimoArrasto = useRef(0);
-    irParaRef.current = (n: number) => {
-        if (giro || performance.now() - ultimoArrasto.current < 400) return;
-        setVirada(duplo ? Math.floor(n / 2) : n - 1);
-    };
+    useLayoutEffect(() => {
+        irParaRef.current = (n: number) => {
+            if (giro || performance.now() - ultimoArrasto.current < 400) return;
+            setVirada(duplo ? Math.floor(n / 2) : n - 1);
+        };
+    });
 
     // arrastar o canto da página
     const inicio = useRef<{ x: number; t: number; lado: 1 | -1; g: Giro | null; link: boolean } | null>(null);

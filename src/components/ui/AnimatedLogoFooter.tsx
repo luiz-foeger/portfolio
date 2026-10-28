@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, Variants, Transition, useAnimationControls, useInView } from 'motion/react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const AnimatedLogoFooter: React.FC = () => { // useAnimatedLogo = () => {
     const controls = useAnimationControls();
@@ -33,7 +33,7 @@ export const AnimatedLogoFooter: React.FC = () => { // useAnimatedLogo = () => {
                         if (!isMounted) break;
                         await controls.start("stacked_reorganize");
                     }
-                } catch (error) {
+                } catch {
                     // ignora erros de interrupção de animação (comuns ao desmontar)
                 }
             }
@@ -73,6 +73,11 @@ export const AnimatedLogoFooter: React.FC = () => { // useAnimatedLogo = () => {
         'dot': 0.4, 'oDotL': 0.5, 'oDotR': 0.55
     };
 
+    // de onde cada pedra cai: sorteado uma vez por montagem (sorteado na renderização, mudaria a cada uma)
+    const [queda] = useState(() =>
+        Object.fromEntries(Object.keys(movements).map(k => [k, { x: (Math.random() - 0.5) * 400, rotate: (Math.random() - 0.5) * 180 }])),
+    );
+
     const createStoneVariant = (letterId: keyof typeof movements, isDot = false): Variants => {
         const target = movements[letterId];
         const myDelay = delayMap[letterId] || 0.1;
@@ -80,7 +85,7 @@ export const AnimatedLogoFooter: React.FC = () => { // useAnimatedLogo = () => {
         const stackedState = { x: 0, y: 0, rotate: 0, scale: 1, opacity: 1 };
 
         return {
-            hidden: { y: -1200, x: (Math.random() - 0.5) * 400, rotate: (Math.random() - 0.5) * 180, opacity: 0, scale: 0.5 },
+            hidden: { y: -1200, x: queda[letterId].x, rotate: queda[letterId].rotate, opacity: 0, scale: 0.5 },
             stacked_fall: { ...stackedState, transition: { ...fallBounce, delay: myDelay * 0.4 } },
             inline_reorganize: {
                 x: target.x, y: target.y, rotate: target.rotate, scale: 1,

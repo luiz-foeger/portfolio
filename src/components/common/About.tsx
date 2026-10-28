@@ -30,6 +30,7 @@ const content = {
     bio: (
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center h-full px-6 md:px-20 w-full md:w-[95vw] shrink-0">
             <div className="w-full md:w-[60vh] aspect-square md:aspect-[4/5] bg-white/5 rounded-3xl border border-white/10 relative overflow-hidden group">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                     src="https://res.cloudinary.com/db43xalo3/image/upload/v1769742982/foeger_kxpqbn.jpg"
                     alt="Luiz Föeger"
@@ -76,7 +77,7 @@ const content = {
                     Hard Skills
                 </h3>
                 <div className="text-left md:text-right font-mono text-xs text-gray-500">
-                    <p>// HOVER_TO_IDENTIFY</p>
+                    <p>{'// HOVER_TO_IDENTIFY'}</p>
                     {/* <p className="flex items-center gap-2 justify-end">
                         <span className="w-2 h-2 rounded-full bg-[#8DCFFB] animate-pulse"></span>
                         ORBITAL_VIEW

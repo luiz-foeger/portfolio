@@ -79,7 +79,7 @@ export const AnimatedLogoHeader: React.FC<{ desfoqueNaEntrada?: boolean }> = ({ 
                         if (!isMounted) break;
                         await controls.start("stacked_reorganize");
                     }
-                } catch (error) { }
+                } catch { }
             }
         };
         sequence();

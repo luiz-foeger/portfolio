@@ -11,6 +11,7 @@ const Header = () => {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- a medida da tela só existe no navegador
         setIsMobile(window.innerWidth < 768);
         const handleScroll = () => {
             if (window.scrollY > 15 && !hasScrolled) setHasScrolled(true);

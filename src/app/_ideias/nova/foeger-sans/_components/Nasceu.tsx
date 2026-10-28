@@ -130,14 +130,14 @@ function Caixas() {
     const larguras = PALAVRA.map(c => GLIFOS[c].w);
     const soma = larguras.reduce((a, b) => a + b, 0);
     const escala = 520 / soma;
-    let x = 40;
+    // onde começa cada caixa: 40 mais as larguras das anteriores
+    const inicios = larguras.map((_, i) => 40 + larguras.slice(0, i).reduce((a, b) => a + b, 0) * escala);
     return (
         <svg viewBox="0 0 600 600" className="h-full w-full">
             {PALAVRA.map((c, i) => {
                 const g = GLIFOS[c];
                 const w = g.w * escala;
-                const x0 = x;
-                x += w;
+                const x0 = inicios[i];
                 const topo = 300 - (TOTAL * escala) / 2;
                 const base = topo + ALTO * escala;
                 return (

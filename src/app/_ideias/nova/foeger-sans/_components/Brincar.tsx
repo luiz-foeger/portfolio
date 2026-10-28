@@ -36,6 +36,7 @@ export default function Brincar() {
     const valor = texto || t.padrao;
 
     // tamanho inicial pela tela
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- a medida da tela só existe no navegador
     useLayoutEffect(() => { setTamanho(window.innerWidth < 768 ? 64 : 150); }, []);
 
     const faltando = useMemo(() => [...new Set([...valor].filter(c => c.trim() && !existe(c)))], [valor]);
@@ -250,6 +251,7 @@ export default function Brincar() {
                 </div>
                 {comPedras && (
                     <div aria-hidden className="absolute inset-0" style={{ color: cor }}>
+                        {/* eslint-disable-next-line react-hooks/refs -- as pedras andam fora do React (o laço move os spans); a lista só muda junto com quantas */}
                         {pedras.current.map((p, i) => (
                             <span
                                 key={i}

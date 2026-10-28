@@ -141,6 +141,7 @@ const Services = () => {
                           transition={{ duration: 0.4, ease: "easeOut" }}
                           className="hidden md:block absolute top-0 left-0 w-[300px] lg:w-[400px] h-[200px] lg:h-[260px] pointer-events-none z-30 rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
                         >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={service.image}
                             alt={service.title}

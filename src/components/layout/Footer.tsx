@@ -67,6 +67,7 @@ const Footer = () => {
 
   // Lógica do Horário BR e Ano
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- o relógio só começa no navegador
     setMounted(true);
     const updateTime = () => {
       const now = new Date();

@@ -10,6 +10,7 @@ const HeroToHeader = () => {
     const [isHidden, setIsHidden] = useState(false);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- a medida da tela só existe no navegador
         setDimensions({
             height: window.innerHeight,
             isMobile: window.innerWidth < 768

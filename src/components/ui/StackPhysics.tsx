@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import Matter from 'matter-js';
 import {
     SiNextdotjs, SiTypescript, SiJavascript, SiTailwindcss,
@@ -30,7 +30,7 @@ const TechPhysicsSimple = () => {
     // tamanho do bloco visual (px)
     const BOX_SIZE = 80;
 
-    const initPhysics = useCallback(() => {
+    const initPhysics = useCallback(function iniciar() {
         if (!containerRef.current) return;
 
         // limpeza prévia
@@ -44,7 +44,7 @@ const TechPhysicsSimple = () => {
         const height = containerRef.current.clientHeight;
 
         if (width === 0) {
-            setTimeout(initPhysics, 100);
+            setTimeout(iniciar, 100);
             return;
         }
 
@@ -68,7 +68,7 @@ const TechPhysicsSimple = () => {
         World.add(engine.world, [floor, ceiling, leftWall, rightWall]);
 
         // física dos blocos
-        const iconBodies = SKILLS.map((_, i) => {
+        const iconBodies = SKILLS.map(() => {
             // blocos spawnam espalhados no topo da área visível
             const x = Math.random() * (width - BOX_SIZE) + BOX_SIZE / 2;
             const y = Math.random() * (height / 2); // spawnam na metade superior
@@ -89,8 +89,10 @@ const TechPhysicsSimple = () => {
             mouse: mouse,
             constraint: { stiffness: 0.1, render: { visible: false } }
         });
-        mouse.element.removeEventListener("mousewheel", (mouse as any).mousewheel);
-        mouse.element.removeEventListener("DOMMouseScroll", (mouse as any).mousewheel);
+        // o matter-js prende a roda do mouse no contêiner; tirar devolve a rolagem da página
+        const roda = (mouse as Matter.Mouse & { mousewheel: EventListener }).mousewheel;
+        mouse.element.removeEventListener("mousewheel", roda);
+        mouse.element.removeEventListener("DOMMouseScroll", roda);
         World.add(engine.world, mouseConstraint);
 
         // runner
@@ -138,8 +140,7 @@ const TechPhysicsSimple = () => {
                 {SKILLS.map((skill, index) => (
                     <div
                         key={index}
-                        // @ts-ignore
-                        ref={(el) => (itemsRef.current[index] = el)}
+                        ref={el => { itemsRef.current[index] = el; }}
                         className="absolute top-0 left-0 flex items-center justify-center p-3 md:p-4 bg-white/5 border border-white/10 rounded-2xl shadow-lg backdrop-blur-xs select-none will-change-transform opacity-0 hover:border-[#8DCFFB]/50 transition-colors duration-300"
                         style={{
                             width: `${BOX_SIZE}px`,
