@@ -12,7 +12,8 @@
 // direitos no pé.
 // - a palavra troca a cada 5 s (parada com a aba oculta): a que sai some com desfoque em 1 s e a que entra aparece em
 //   1,6 s, as duas power3.inOut no mesmo instante;
-// - os links: o texto rola (0,7 s power3.out), com os sublinhados que correm (fa.css);
+// - os links: o texto rola (0,7 s power3.out), com os sublinhados que correm (fa.css), e a etiqueta do cursor diz o que
+//   o clique faz (o e-mail e o começo de projeto abrem o e-mail; as redes, a página delas em outra aba);
 // - a troca de idioma: o rodapé remonta com o idioma (page.tsx), e os textos reaparecem pelo desfoque; na palavra que
 //   troca, a animação vai no contêiner, para não mexer no laço dela.
 import { useEffect, useRef } from 'react';
@@ -25,7 +26,8 @@ import { power3InOut } from '../_fa/movimento';
 import { Rola, rolarTexto } from '../_fa/Pecas';
 
 export default function Rodape() {
-    const r = textosDoRumo(useIdioma().idioma).rodape;
+    const t = textosDoRumo(useIdioma().idioma);
+    const r = t.rodape;
     const rodape = useRef<HTMLElement>(null);
     const troca = useRef<HTMLSpanElement>(null);
     useTrocaDeIdioma(rodape, '[data-idioma]');
@@ -78,18 +80,18 @@ export default function Rodape() {
                         <span className="fa-ro-rotulo" data-idioma>
                             {r.contato}
                         </span>
-                        <a href={`mailto:${EMAIL}`} className="fa-ro-email fa-sublinha" onMouseEnter={rolarTexto(0.7)}>
+                        <a href={`mailto:${EMAIL}`} className="fa-ro-email fa-sublinha" onMouseEnter={rolarTexto(0.7)} data-cursor={t.cursor.email}>
                             <Rola texto={EMAIL} />
                         </a>
                         <p className="fa-ro-comecar" data-idioma>
-                            <a href={`mailto:${EMAIL}`} className="fa-sublinha2" onMouseEnter={rolarTexto(0.7)}>
+                            <a href={`mailto:${EMAIL}`} className="fa-sublinha2" onMouseEnter={rolarTexto(0.7)} data-cursor={t.cursor.email}>
                                 <Rola texto={r.comecar} />
                             </a>
                         </p>
                     </div>
                     <div className="fa-ro-redes">
                         {LINKS.map(l => (
-                            <a key={l.texto} href={l.href} target="_blank" rel="noreferrer" className="fa-sublinha2" onMouseEnter={rolarTexto(0.7)}>
+                            <a key={l.texto} href={l.href} target="_blank" rel="noreferrer" className="fa-sublinha2" onMouseEnter={rolarTexto(0.7)} data-cursor={t.cursor.redes[l.texto]}>
                                 <Rola texto={l.texto} />
                             </a>
                         ))}

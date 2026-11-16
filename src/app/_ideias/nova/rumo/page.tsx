@@ -41,6 +41,7 @@ export default function Rumo() {
                     <FundoOndas />
                 </>
             }
+            sobre={<Cursor />}
         >
             <section id="segredo" aria-hidden data-fundo={cores.fundo} data-tinta={cores.tinta} className="h-[100svh]" />
             {/* o hero e as seções depois dele, com o índice lateral preso no meio da tela a partir do ato */}
@@ -57,7 +58,6 @@ export default function Rumo() {
             </div>
             <Barquinho />
             <Bordas />
-            <Cursor />
             <GraoVivo />
         </Casca>
     );

@@ -7,7 +7,10 @@
 //   cabeçalho, cresce até o meio da tela e liga a animação de hoje (empilha e alterna com a escrita); rolando de volta,
 //   ela encolhe para o cabeçalho e para na versão escrita.
 // O resto: o Menu com o hambúrguer e o texto que rola no hover, o menu de cortina com os itens que entram do desfoque
-// (no hover de um item, os outros apagam e desfocam e o sublinhado corre). O modo diferença fica sempre ligado, como
+// (no hover de um item, os outros apagam e desfocam e o sublinhado corre) e, no pé, o e-mail e as redes, discretos,
+// para quem só quer o contato. A logo e o idioma que não está ativo
+// levam a etiqueta do cursor (data-cursor) com o que o clique faz; o Menu, que já diz isso no texto, leva um convite
+// (fechado, explorar; aberto, voltar à página). O modo diferença fica sempre ligado, como
 // no índice lateral (ver .fa-cab no fim de fa.css): o cabeçalho acompanha o que passa atrás dele, inclusive as imagens
 // e o creme do ato da escala, que ficam por cima do fundo de cores da página
 import { useEffect, useRef, useState } from 'react';
@@ -17,7 +20,8 @@ import { power3Out } from './movimento';
 import { Rola, rolarTexto } from './Pecas';
 import { LogoViva } from '../_comp/LogoViva';
 import { useIdioma } from '../../_lib/idioma';
-import { textosDoRumo, type Alvo } from '../_lib/textos';
+import { EMAIL, LINKS } from '../../_lib/textos';
+import { textosDoRumo, VER_NO_IDIOMA, type Alvo } from '../_lib/textos';
 import { useTrocaDeIdioma, useTrocou } from '../_lib/troca';
 
 // a largura da logo grande no segredo, em fração da tela
@@ -103,7 +107,8 @@ export default function Cabecalho() {
         setAberto(abrir);
         const m = menu.current;
         if (!m) return;
-        const itens = m.querySelectorAll<HTMLElement>('button');
+        // os itens e, por último, o pé com o contato
+        const itens = m.querySelectorAll<HTMLElement>('.fa-menu-lista button, .fa-menu-pe');
         if (abrir) {
             rolagem.lenis?.stop();
             m.style.visibility = 'visible';
@@ -161,9 +166,40 @@ export default function Cabecalho() {
                         </button>
                     ))}
                 </div>
+                {/* o pé: o e-mail e as redes numa linha discreta, para quem só quer o contato sem rolar até o rodapé; os
+                    mesmos links do rodapé, com o texto que rola, o sublinhado e as etiquetas do cursor */}
+                <div className="fa-menu-pe">
+                    <a href={`mailto:${EMAIL}`} className="fa-sublinha2" onMouseEnter={rolarTexto(0.7)} data-cursor={t.cursor.email} tabIndex={aberto ? 0 : -1}>
+                        <Rola texto={EMAIL} />
+                    </a>
+                    <span className="fa-menu-pe-redes">
+                        {LINKS.map(l => (
+                            <a
+                                key={l.texto}
+                                href={l.href}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="fa-sublinha2"
+                                onMouseEnter={rolarTexto(0.7)}
+                                data-cursor={t.cursor.redes[l.texto]}
+                                tabIndex={aberto ? 0 : -1}
+                            >
+                                <Rola texto={l.texto} />
+                            </a>
+                        ))}
+                    </span>
+                </div>
             </div>
             <header ref={cab} className="fa-cab" data-menu={aberto ? '' : undefined}>
-                <button type="button" className="fa-cab-menu" onMouseEnter={passarHamburguer} onClick={alternar} aria-expanded={aberto}>
+                <button
+                    type="button"
+                    className="fa-cab-menu"
+                    onMouseEnter={passarHamburguer}
+                    onClick={alternar}
+                    aria-expanded={aberto}
+                    aria-keyshortcuts={aberto ? 'Escape' : undefined}
+                    data-cursor={aberto ? t.cursor.voltar : t.cursor.explorar}
+                >
                     <span className="fa-hamburguer" aria-hidden>
                         <span>
                             <i />
@@ -187,6 +223,7 @@ export default function Cabecalho() {
                     className="fa-cab-logo relative"
                     style={{ width: 'calc(var(--logo-h) * 2580 / 890)' }}
                     aria-label="Föeger"
+                    data-cursor={t.cursor.inicio}
                     onClick={e => {
                         e.preventDefault();
                         // com o menu aberto, a logo também o fecha (e vai ao topo depois da cortina, como os itens)
@@ -213,6 +250,7 @@ export default function Cabecalho() {
                                 onClick={() => definir(i)}
                                 aria-pressed={idioma === i}
                                 lang={i === 'pt' ? 'pt-BR' : 'en'}
+                                data-cursor={idioma === i ? undefined : VER_NO_IDIOMA[i]}
                                 className={`uppercase transition-opacity ${idioma === i ? 'opacity-100' : 'opacity-40 hover:opacity-80'}`}
                             >
                                 {i}

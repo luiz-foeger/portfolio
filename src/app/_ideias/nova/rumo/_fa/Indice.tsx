@@ -10,7 +10,8 @@
 // distância à posição: 1, 0,32, 0,24, 0,16, 0,08. Os números rolam até a seção (expo.out de 1,5 s). As seções daqui
 // são longas (o manifesto fica preso por várias telas), então o nome troca só nos últimos 15% de cada uma; com o
 // progresso contínuo ele passaria quase a seção toda cortado ao meio na janela. Os nomes vêm nos dois idiomas; o passo
-// entre as linhas é medido no DOM, porque a unidade tem mínimo (ver .fa-indice em fa.css)
+// entre as linhas é medido no DOM, porque a unidade tem mínimo (ver .fa-indice em fa.css). Os números são os botões,
+// e a etiqueta do cursor diz para qual seção cada um leva
 import { useEffect, useRef } from 'react';
 import { aCadaQuadro, geo, rolarPara } from './laco';
 import { ramp } from './movimento';
@@ -86,7 +87,7 @@ export default function Indice() {
                 <div className="fa-indice-conteudo">
                     <div ref={numeros} className="fa-indice-numeros">
                         {SECOES.map((s, i) => (
-                            <button key={s} type="button" onClick={() => rolarPara(inicio(s))} aria-label={r.rotulos[s]}>
+                            <button key={s} type="button" onClick={() => rolarPara(inicio(s))} aria-label={r.rotulos[s]} data-cursor={`${r.cursor.irPara} ${r.rotulos[s]}`}>
                                 {i + 1}
                             </button>
                         ))}

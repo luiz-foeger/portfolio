@@ -29,7 +29,9 @@ const topoDoHero = () => {
     return hero ? hero.getBoundingClientRect().top + window.scrollY : 0;
 };
 
-export default function Casca({ children, fundo }: { children: ReactNode; fundo?: ReactNode }) {
+// sobre: o que fica por cima de tudo, até do cabeçalho, da faixa de desfoque e do menu aberto (o cursor da página); fora
+// do bloco do conteúdo, que é um contexto de empilhamento próprio e deixava o cursor por baixo dessas peças
+export default function Casca({ children, fundo, sobre }: { children: ReactNode; fundo?: ReactNode; sobre?: ReactNode }) {
     const lenis = useLenis();
     const raiz = useRef<HTMLDivElement>(null);
 
@@ -66,6 +68,7 @@ export default function Casca({ children, fundo }: { children: ReactNode; fundo?
             <Indicador />
             <div className="fa-desfoque" aria-hidden />
             <Cabecalho />
+            {sobre}
             <Carregando raiz={raiz} />
         </div>
     );

@@ -16,8 +16,15 @@
 // - com data-cursor-setas (o arrasto da faixa curva), a etiqueta leva setinhas dos dois lados, que se afastam com o
 //   clique segurado e vão para o lado em que o mouse anda;
 // - com data-cursor-acima (o barquinho do rodapé na mão, pendurado embaixo da seta), a etiqueta escorre para cima da
-//   seta, para não cair sobre o papel branco.
-import { useEffect, useId, useRef, useState } from 'react';
+//   seta, para não cair sobre o papel branco;
+// - perto da borda direita, onde a pílula não cabe (o idioma, o e-mail e as redes ficam encostados nela), ela escorre
+//   para a esquerda da seta (15/11);
+// - nos links e botões baixos (até TEXTO.altura: os do cabeçalho, do índice e do rodapé), a pílula fica logo abaixo
+//   deles, seguindo a seta só na horizontal, para não cobrir o texto; sem lugar embaixo, logo acima; e, numa lista de
+//   links (o e-mail e as redes do rodapé), ao lado do link, para não cobrir o vizinho (15/11).
+// Ele fica por cima de tudo, até do cabeçalho, da faixa de desfoque do topo e do menu aberto: a página o passa à Casca
+// fora do bloco do conteúdo (a prop sobre), e não dentro dele, onde ficava por baixo dessas peças.
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, useVelocity, type MotionValue } from 'motion/react';
 
 const CABECA = { damping: 28, stiffness: 260, mass: 0.6 };
@@ -25,14 +32,29 @@ const FORMA = { damping: 19, stiffness: 160, mass: 0.9 };
 const APERTO = { damping: 22, stiffness: 400, mass: 0.5 };
 const GOTA = 12;
 const ALTURA = 38;
-// onde a gota descansa em relação à ponta da seta, e quanto a cabeça escorre para virar a etiqueta
+// onde a gota descansa em relação à ponta da seta, e quanto a cabeça escorre para virar a etiqueta (para a esquerda,
+// a pílula termina a esquerda px antes da ponta)
 const SOMBRA = { x: 14, y: 18 };
-const ESCORRE = { x: 18, y: 8, acima: -48 };
+const ESCORRE = { x: 18, y: 8, acima: -48, esquerda: 6 };
+// a folga entre a pílula e as bordas da tela: à direita, abaixo dela a pílula escorre para a esquerda; embaixo, ela
+// passa para cima do link
+const BORDA = 12;
+// os links e botões de texto: até que altura contam como baixos, e o vão entre eles e a pílula
+const TEXTO = { altura: 64, vao: 6 };
 // a caixa do filtro em volta da cabeça (cabe a pílula mais larga e o pingo esticado)
 const CAIXA = { esquerda: 64, cima: 64, largura: 300, altura: 128 };
 // os elos atrás da cabeça: quantos, o quanto cada um corre atrás do anterior (por segundo; os de trás mais devagar), o
 // quanto o raio cai até a ponta e a distância máxima até o anterior (em fração do raio e em px, o que for menor)
 const ELOS = { n: 6, segue: 34, cai: 3, afina: 0.55, preso: 0.9, max: 5 };
+
+// se a pílula, na faixa de x0 a x1 e na altura y da tela, cairia sobre outro link ou botão (que não o do alvo): três
+// pontos de prova ao longo dela
+function cobreOutro(alvo: HTMLElement, x0: number, x1: number, y: number) {
+    return [x0 + 4, (x0 + x1) / 2, x1 - 4].some(px => {
+        const outro = document.elementFromPoint(px, y)?.closest('a, button');
+        return !!outro && outro !== alvo && !alvo.contains(outro);
+    });
+}
 
 function Seta({ lado, abre, vx }: { lado: -1 | 1; abre: MotionValue<number>; vx: MotionValue<number> }) {
     // afasta com o clique segurado e anda para o lado do movimento (até 5 px)
@@ -72,6 +94,38 @@ export default function Cursor() {
     const [visivel, setVisivel] = useState(false);
     const medida = useRef<HTMLSpanElement>(null);
     const atual = useRef<string | null>(null);
+    // o elemento sob a seta que deu a etiqueta, e a pílula aberta (a largura dela e se vai acima da seta)
+    const alvo = useRef<HTMLElement | null>(null);
+    const pilula = useRef({ aberta: false, w: GOTA, acima: false });
+
+    // onde a pílula fica, no escorrido da cabeça: ao lado da seta, para a direita (ou para a esquerda, perto da borda
+    // direita, onde não cabe) e um pouco abaixo da ponta (ou acima da seta, com data-cursor-acima). Nos links e botões
+    // baixos ela fica logo abaixo deles, seguindo a seta só na horizontal (sem lugar embaixo, logo acima); numa lista de
+    // links, com outro logo acima ou abaixo (o e-mail e as redes do rodapé), ela vai para o lado do link, na altura
+    // dele. As contas são da ponta esquerda e do topo da pílula na tela; com o escorrido zero, eles ficam em
+    // x0 e y0 (a seta + SOMBRA − meia altura)
+    const encaixar = useCallback(() => {
+        const p = pilula.current;
+        if (!p.aberta) return;
+        const px = x.get(), py = y.get();
+        const x0 = px + SOMBRA.x - ALTURA / 2, y0 = py + SOMBRA.y - ALTURA / 2;
+        let esquerda = x0 + ESCORRE.x + p.w + BORDA <= window.innerWidth ? x0 + ESCORRE.x : px - ESCORRE.esquerda - p.w;
+        let topo = y0 + (p.acima ? ESCORRE.acima : ESCORRE.y);
+        const el = alvo.current;
+        const r = !p.acima && el && (el.tagName === 'A' || el.tagName === 'BUTTON') ? el.getBoundingClientRect() : null;
+        if (el && r && r.height > 0 && r.height <= TEXTO.altura) {
+            const embaixo = r.bottom + TEXTO.vao;
+            topo = embaixo + ALTURA <= window.innerHeight - BORDA ? Math.max(topo, embaixo) : r.top - TEXTO.vao - ALTURA;
+            // a lista: outro link logo abaixo ou logo acima (o último da lista também vai para o lado, como os outros)
+            const vizinho = (meio: number) => cobreOutro(el, esquerda, esquerda + p.w, meio);
+            if (vizinho(embaixo + ALTURA / 2) || vizinho(r.top - TEXTO.vao - ALTURA / 2)) {
+                esquerda = r.right + TEXTO.vao + p.w + BORDA <= window.innerWidth ? r.right + TEXTO.vao : r.left - TEXTO.vao - p.w;
+                topo = r.top + r.height / 2 - ALTURA / 2;
+            }
+        }
+        ex.set(esquerda - x0);
+        ey.set(topo - y0);
+    }, [x, y, ex, ey]);
 
     // a caixa do filtro anda com a cabeça (no ponto de descanso mais o escorrido)
     const caixaX = useTransform([cx, sex], ([a, e]: number[]) => a + SOMBRA.x + e - CAIXA.esquerda);
@@ -91,6 +145,9 @@ export default function Cursor() {
             // com o botão apertado (o arrasto da faixa rola a página), uma leitura vazia no meio da rolagem não fecha a
             // etiqueta; ao soltar, confere de novo
             if (apertado && !r && atual.current) return;
+            // o elemento troca mesmo com a mesma etiqueta (o e-mail e o começo de projeto têm a mesma), e a pílula vai
+            // para baixo do novo
+            if (r) alvo.current = el ?? null;
             const s = !!el?.hasAttribute('data-cursor-setas');
             const a = !!el?.hasAttribute('data-cursor-acima');
             const chave = r ? `${r}|${s}|${a}` : null;
@@ -118,6 +175,7 @@ export default function Cursor() {
                 ultima = agora;
                 buscar();
             }
+            encaixar();
         };
         const apertar = (e: PointerEvent) => {
             if (e.pointerType === 'touch' || e.button !== 0) return;
@@ -131,7 +189,10 @@ export default function Cursor() {
         };
         // com o mouse parado e a página rolando, o alvo sob a seta muda sozinho; e um rótulo pode mudar sem o mouse
         // andar (a faixa curva troca o dela quando uma capa passa por baixo, abre ou o clique é segurado)
-        const rolar = () => buscar();
+        const rolar = () => {
+            buscar();
+            encaixar();
+        };
         const rotulos = new MutationObserver(buscar);
         rotulos.observe(document.body, { subtree: true, attributes: true, attributeFilter: ['data-cursor', 'data-cursor-setas', 'data-cursor-acima'] });
         const sair = () => setVisivel(false);
@@ -154,7 +215,7 @@ export default function Cursor() {
             window.removeEventListener('scroll', rolar);
             document.documentElement.removeEventListener('pointerleave', sair);
         };
-    }, [x, y, aperto]);
+    }, [x, y, aperto, encaixar]);
 
     // os elos, a cada quadro: cada um corre atrás do anterior (o primeiro, atrás do meio da cabeça) e fica preso a ele
     // pela distância máxima; o desenho é na caixa do filtro, que anda com a cabeça
@@ -199,28 +260,28 @@ export default function Cursor() {
         return () => cancelAnimationFrame(quadro);
     }, [cx, cy, sex, sey, sl, sa]);
 
-    // a forma: a pílula do tamanho do conteúdo (o texto e as setinhas), escorrida para o lado (ou para cima da seta), ou
-    // a gota
+    // a forma: a pílula do tamanho do conteúdo (o texto e as setinhas), no lugar que encaixar() dá, ou a gota
     useEffect(() => {
         if (rotulo && medida.current) {
-            largura.set(medida.current.offsetWidth + 30);
+            pilula.current = { aberta: true, w: medida.current.offsetWidth + 30, acima };
+            largura.set(pilula.current.w);
             altura.set(ALTURA);
-            ex.set(ESCORRE.x);
-            ey.set(acima ? ESCORRE.acima : ESCORRE.y);
+            encaixar();
         } else {
+            pilula.current.aberta = false;
             largura.set(GOTA);
             altura.set(GOTA);
             ex.set(0);
             ey.set(0);
         }
-    }, [rotulo, setas, acima, largura, altura, ex, ey]);
+    }, [rotulo, setas, acima, largura, altura, ex, ey, encaixar]);
 
     const estiloDoTexto = { fontWeight: 600, fontSize: 14, gap: 8 } as const;
 
     return (
         <motion.div
             aria-hidden
-            className="pointer-events-none fixed left-0 top-0 z-[100] hidden md:block"
+            className="pointer-events-none fixed left-0 top-0 z-[101] hidden md:block"
             style={{
                 x: caixaX,
                 y: caixaY,

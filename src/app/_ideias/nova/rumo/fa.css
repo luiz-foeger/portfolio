@@ -463,6 +463,38 @@
     filter: blur(10px);
 }
 
+/* o pé do menu aberto (15/11): o e-mail e as redes numa linha discreta embaixo, para quem só quer o contato sem rolar
+   até o rodapé. No tamanho e na margem do cabeçalho (o espelho dele embaixo) e na cor dos itens; quando não cabe numa
+   linha, o e-mail fica em cima e as redes juntas embaixo */
+.fa-menu-pe,
+.fa-menu-pe-redes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.8em 2.4em;
+}
+
+.fa-menu-pe {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: max(18px, calc(4.8 * var(--fa-r))) max(18px, var(--padding-x));
+    font-size: max(13px, 0.88vw);
+    line-height: 1.3;
+    color: #fff;
+    mix-blend-mode: difference;
+    opacity: 0;
+    filter: blur(10px);
+}
+
+@media (max-width: 767px) {
+    .fa-menu-pe,
+    .fa-menu-pe-redes {
+        column-gap: 1.6em;
+    }
+}
+
 /* ---------- hero ---------- */
 
 #hero {
@@ -700,9 +732,10 @@
         fa-sub-b 0.3s var(--easeOutQuart) 0.3s forwards;
 }
 
-/* os itens do menu com um mínimo para as telas pequenas (na escala do desktop eles ficavam com ~32 px no celular) */
+/* os itens do menu com um mínimo para as telas pequenas (na escala do desktop eles ficavam com ~32 px no celular) e,
+   com os quatro itens, um teto pela altura, para a lista caber nas janelas largas e baixas */
 .fa-menu-lista {
-    font-size: max(54px, calc(16 * var(--fa-r)));
+    font-size: max(54px, min(calc(16 * var(--fa-r)), 20vh));
 }
 
 /* o hero nas telas pequenas, com a mesma escada: a escala das peças (--fa-r) cresce até a escada caber
@@ -1544,8 +1577,8 @@
     letter-spacing: -0.02em;
 }
 
-/* os sublinhados do rodapé: o que entra da esquerda e sai pela direita (o começo de projeto e as redes) e, no e-mail,
-   o que some para a direita e volta da esquerda */
+/* os sublinhados do rodapé: o que entra da esquerda e sai pela direita (o começo de projeto e as redes, e os links do
+   pé do menu) e, no e-mail, o que some para a direita e volta da esquerda */
 .fa-sublinha2 {
     position: relative;
     display: inline-block;
@@ -1565,7 +1598,8 @@
 }
 
 #footer a:hover .fa-sublinha2::after,
-#footer a:hover.fa-sublinha2::after {
+#footer a:hover.fa-sublinha2::after,
+.fa-menu-pe a:hover.fa-sublinha2::after {
     transform-origin: left;
     transform: scaleX(1);
 }

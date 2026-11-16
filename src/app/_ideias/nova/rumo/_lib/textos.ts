@@ -58,11 +58,26 @@ const R = {
         },
         menu: 'Menu',
         fechar: 'Fechar',
+        // os itens do menu aberto, as seções da página na ordem em que aparecem (com os nomes do índice lateral)
         itens: [
             { texto: 'Início', alvo: 'hero' },
+            { texto: 'Serviços', alvo: 'projetos' },
+            { texto: 'Projetos', alvo: 'galeria' },
             { texto: 'Contato', alvo: 'footer' },
         ] as { texto: string; alvo: Alvo }[],
         rotulos: { indice: 'Seções', hero: 'Escala', projetos: 'Serviços', galeria: 'Projetos' },
+        // as etiquetas do cursor (_comp/Cursor.tsx) nos links e botões que levam a algum lugar: o que acontece no clique,
+        // curto (a pílula tem uma linha). As redes vão pelo nome do link em LINKS (/nova/_lib/textos.ts), com a seta de
+        // quem abre outra aba. O Menu já diz no próprio texto o que o clique faz, então a etiqueta dele convida em vez de
+        // repetir: fechado, explorar; aberto, voltar à página
+        cursor: {
+            explorar: 'Explorar',
+            voltar: 'Voltar',
+            inicio: 'Voltar ao início',
+            irPara: 'Ir para',
+            email: 'Enviar e-mail',
+            redes: { Instagram: 'Seguir ↗', LinkedIn: 'Conectar ↗', Behance: 'Ver designs ↗', GitHub: 'Ver código ↗' } as Record<string, string>,
+        },
         // o rodapé (_comp/Rodape.tsx): o slogan em quatro linhas com a palavra que troca, o lugar com o relógio e a base
         rodape: {
             linhas: ['Vamos', 'tirar'],
@@ -120,9 +135,19 @@ const R = {
         fechar: 'Close',
         itens: [
             { texto: 'Home', alvo: 'hero' },
+            { texto: 'Services', alvo: 'projetos' },
+            { texto: 'Projects', alvo: 'galeria' },
             { texto: 'Contact', alvo: 'footer' },
         ] as { texto: string; alvo: Alvo }[],
         rotulos: { indice: 'Sections', hero: 'Scale', projetos: 'Services', galeria: 'Projects' },
+        cursor: {
+            explorar: 'Explore',
+            voltar: 'Go back',
+            inicio: 'Back to start',
+            irPara: 'Go to',
+            email: 'Send an email',
+            redes: { Instagram: 'Follow ↗', LinkedIn: 'Connect ↗', Behance: 'See designs ↗', GitHub: 'See code ↗' } as Record<string, string>,
+        },
         rodape: {
             linhas: ["Let's", 'get'],
             troca: ['ideas', 'brands', 'products', 'sites'],
@@ -136,3 +161,7 @@ const R = {
 } satisfies Record<Idioma, unknown>;
 
 export const textosDoRumo = (idioma: Idioma) => R[idioma];
+
+// a etiqueta do cursor no idioma que ainda não está ativo, escrita nesse idioma (quem não lê o atual entende a dele);
+// o ativo fica sem etiqueta, porque o clique nele não faz nada
+export const VER_NO_IDIOMA: Record<Idioma, string> = { pt: 'Ver em português', en: 'View in English' };
